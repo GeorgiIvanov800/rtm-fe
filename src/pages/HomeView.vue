@@ -1,13 +1,5 @@
-<script setup lang="ts">
-import AppFooter from '@/components/AppFooter.vue';
-import AppHeader from '@/components/AppHeader.vue';
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <AppHeader />
-  <v-main>
-
-  </v-main>
-  <AppFooter />
+  <h1>Home component</h1>
 </template>

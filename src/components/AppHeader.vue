@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar :elevation="24">
+  <v-app-bar :elevation="2" rounded>
     <template v-slot:prepend>
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
     </template>
