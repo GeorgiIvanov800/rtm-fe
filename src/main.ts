@@ -1,4 +1,5 @@
 import './styles/reset.css'
+import './styles/main.css'
 import '@mdi/font/css/materialdesignicons.css'
 
 import 'vuetify/styles'
@@ -18,6 +19,9 @@ const vuetify = createVuetify({
   components,
   directives,
   ssr: true,
+  theme: {
+    defaultTheme: 'light',
+  },
   icons: {
     defaultSet: 'mdi',
     aliases,
