@@ -12,6 +12,7 @@ import * as directives from 'vuetify/directives'
 import App from './App.vue'
 import router from './router'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
+import axiosInstance from './config/axios'
 
 const app = createApp(App)
 
@@ -34,5 +35,7 @@ const vuetify = createVuetify({
 app.use(createPinia())
 app.use(vuetify)
 app.use(router)
+app.config.globalProperties.$axios = axiosInstance
+app.provide('axios', axiosInstance)
 
 app.mount('#app')
