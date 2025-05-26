@@ -1,15 +1,31 @@
 <script setup lang="ts">
-import type { ValidationRule } from 'vuetify';
+import { ref } from 'vue'
+import { useRouter, type Router } from 'vue-router'
+import type { ValidationRule } from 'vuetify'
+import type { VForm } from 'vuetify/lib/components/VForm/VForm.mjs'
 
+const form = ref<InstanceType<typeof VForm> | null>(null)
+const searchValue = ref('')
+const router: Router = useRouter()
 
 const numericRules: ValidationRule[] = [
   (value: string): true | string => {
     if (/^[0-9]+$/.test(value)) return true
-    return "Bitte geben Sie nur Nummern"
-  }
+    return 'Bitte geben Sie nur Nummern'
+  },
 ]
-</script>
 
+async function onSearch(): Promise<void> {
+  const result = await form.value?.validate()
+
+  if (result?.valid) {
+    console.log('Form:', form.value)
+    console.log('Form is valid value is: ', searchValue.value)
+  } else {
+    console.log('Form is not valid')
+  }
+}
+</script>
 
 <template>
   <v-container class="pa-4 fill-height d-flex align-center justify-center">
@@ -22,12 +38,17 @@ const numericRules: ValidationRule[] = [
             Suche Sleeve
           </v-card-title>
           <v-card-text>
-            <v-text-field :rules="numericRules" label="Bitte Sleeve Satznummer Eingeben" clearable />
+            <v-form ref="form" @submit.prevent>
+              <v-text-field v-model="searchValue" :rules="numericRules" label="Bitte Sleeve Satznummer Eingeben"
+                clearable />
+            </v-form>
           </v-card-text>
+
           <v-card-actions>
             <v-spacer />
-            <v-btn prepend-icon="$vuetify" color="primary" variant="outlined" rounded="xl" size="x-large">
-              Search
+            <v-btn @click="onSearch" prepend-icon="$vuetify" color="primary" variant="outlined" rounded="xl"
+              size="x-large">
+              Suchen
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -43,9 +64,7 @@ const numericRules: ValidationRule[] = [
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn color="secondary">
-              Print Note
-            </v-btn>
+            <v-btn color="secondary"> Print Note </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
