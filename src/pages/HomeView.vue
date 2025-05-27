@@ -18,12 +18,11 @@ const numericRules: ValidationRule[] = [
 
 async function onSearch(): Promise<void> {
   const result = await form.value?.validate();
-
   if (result?.valid) {
-    console.log('Form:', form.value);
-    console.log('Form is valid value is: ', searchValue.value);
+    router.push({ path: '/sleeves', query: { sleeveSequence: searchValue.value } });
+
   } else {
-    console.log('Form is not valid');
+    return;
   }
 }
 </script>
