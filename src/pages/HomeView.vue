@@ -1,28 +1,29 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter, type Router } from 'vue-router'
-import type { ValidationRule } from 'vuetify'
-import type { VForm } from 'vuetify/lib/components/VForm/VForm.mjs'
+import { ref } from 'vue';
+import { useRouter, type Router } from 'vue-router';
+import type { ValidationRule } from 'vuetify';
+import type { VForm } from 'vuetify/lib/components/VForm/VForm.mjs';
 
-const form = ref<InstanceType<typeof VForm> | null>(null)
-const searchValue = ref('')
-const router: Router = useRouter()
+
+const form = ref<InstanceType<typeof VForm> | null>(null);
+const searchValue = ref('');
+const router: Router = useRouter();
 
 const numericRules: ValidationRule[] = [
   (value: string): true | string => {
-    if (/^[0-9]+$/.test(value)) return true
-    return 'Bitte geben Sie nur Nummern'
+    if (/^[0-9]+$/.test(value)) return true;
+    return 'Bitte geben Sie nur Nummern';
   },
-]
+];
 
 async function onSearch(): Promise<void> {
-  const result = await form.value?.validate()
+  const result = await form.value?.validate();
 
   if (result?.valid) {
-    console.log('Form:', form.value)
-    console.log('Form is valid value is: ', searchValue.value)
+    console.log('Form:', form.value);
+    console.log('Form is valid value is: ', searchValue.value);
   } else {
-    console.log('Form is not valid')
+    console.log('Form is not valid');
   }
 }
 </script>

@@ -1,15 +1,15 @@
-import HomeView from '@/pages/HomeView.vue'
-import { createRouter, createWebHistory } from 'vue-router'
+import HomeView from '@/pages/HomeView.vue';
+import SleeveView from '../pages/Sleeve/SleeveView.vue';
+import { createRouter, createWebHistory } from 'vue-router';
+
+const routes = [
+  { path: '/', name: 'home', component: HomeView },
+  { path: '/sleeves', name: 'sleeves', component: SleeveView },
+];
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: HomeView,
-    },
-  ],
-})
+  routes,
+  history: createWebHistory(),
+});
 
-export default router
+export default router;
