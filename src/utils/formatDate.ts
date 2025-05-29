@@ -2,7 +2,7 @@ export function formatDate(
   isoDateString: string,
   locale = navigator.language,
   options?: Intl.DateTimeFormatOptions,
-): string {
+): string | undefined {
   // Parse the “YYYY-MM-DD” string into a Date
   const [year, month, day] = isoDateString.split('-').map(Number);
   const date = new Date(year, month - 1, day);
