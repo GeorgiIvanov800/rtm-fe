@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { SleeveControllerApi, type SleeveResponse } from '@/openapi';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { type DataTableHeader } from 'vuetify';
-import { tr } from 'vuetify/locale';
 import { formatDate } from '@/utils/formatDate';
+import { onMounted } from 'vue';
+
 const props = defineProps<{
   sequenceNumber?: number;
 }>();
 
 const sleeveData = ref(<SleeveResponse[]>[]);
+
 const EMPTY_MESSAGE = ref(
   'Keine Sleeves mit der angegebenen Satznummer gefunden. Bitte versuchen Sie es mit einer anderen Nummer.',
 );
@@ -28,26 +30,31 @@ async function getSleevesBySequenceNumber() {
   }
 }
 
-
+onMounted(async () => {
+  try {
+    const response = await sleeveApi.getSleeveSequenceNumber(number);
+    return (sleeveData.value = response.data);
+  } catch (e) {
+    console.error('Opps unexpected', e);
+    return [];
+  }
+});
 
 const headers: DataTableHeader[] = [
-  { title: 'Satz Nummer', key: 'sequenceNumber', align: 'start' },
-  { title: 'Type', key: 'type', align: 'start' },
-  { title: 'Design', key: 'design', align: 'start' },
-  { title: 'Farbe', key: 'color', align: 'start' },
-  { title: 'Lager', key: 'warehouse', align: 'start' },
-  { title: 'Platz', key: 'slot', align: 'start' },
-  { title: 'Zahnrad', key: 'gear' },
-  { title: 'Width', key: 'width' },
-  { title: 'Sleeve Number', key: 'sleeveNumber' },
+  { title: 'Satz Nummer', key: 'sequenceNumber', align: 'start', sortable: false },
+  { title: 'Type', key: 'type', align: 'start', sortable: false },
+  { title: 'Design', key: 'design', align: 'start', sortable: false },
+  { title: 'Farbe', key: 'color', align: 'start', sortable: false },
+  { title: 'Lager', key: 'warehouse', align: 'start', sortable: false },
+  { title: 'Platz', key: 'slot', align: 'start', sortable: false },
+  { title: 'Zahnrad', key: 'gear', sortable: false },
+  { title: 'Breite', key: 'width', sortable: false },
+  { title: 'Sleeve Number', key: 'sleeveNumber', sortable: false },
   { title: 'Datum', key: 'manufactureDate', align: 'end', sortable: true },
 ];
 </script>
 
 <template>
-  <h1>Sleeve Table Works</h1>
-  <p>{{ sequenceNumber }}</p>
-  <h1>{{ sequenceNumber }}</h1>
   <v-btn @click="getSleevesBySequenceNumber" prepend-icon="$vuetify" variant="tonal">
     Button
   </v-btn>

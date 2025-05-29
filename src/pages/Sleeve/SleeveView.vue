@@ -9,7 +9,9 @@ const sequenceNumber: number = Number(queryValue);
 </script>
 
 <template>
-  <h1>Sleeve View Works</h1>
-  <h2>{{ queryValue }}</h2>
-  <SleeveTable :sequenceNumber="sequenceNumber" />
+  <v-sheet class="pa-8 elevation-4 rounded-lg" color="surface">
+    <v-container>
+      <SleeveTable :sequenceNumber="sequenceNumber" />
+    </v-container>
+  </v-sheet>
 </template>
