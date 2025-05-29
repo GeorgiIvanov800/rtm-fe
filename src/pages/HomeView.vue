@@ -43,7 +43,6 @@ async function onSearch(): Promise<void> {
                 clearable />
             </v-form>
           </v-card-text>
-
           <v-card-actions>
             <v-spacer />
             <v-btn @click="onSearch" prepend-icon="$vuetify" color="primary" variant="outlined" rounded="xl"

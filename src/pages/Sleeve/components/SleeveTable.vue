@@ -1,44 +1,26 @@
 <script setup lang="ts">
-import { SleeveControllerApi, type SleeveResponse } from '@/openapi';
-import { ref } from 'vue';
 import { type DataTableHeader } from 'vuetify';
 import { formatDate } from '@/utils/formatDate';
-import { onMounted } from 'vue';
+import type { SleeveResponse } from '@/openapi';
+import { ref } from 'vue';
+import { computed } from 'vue';
+
 
 const props = defineProps<{
-  sequenceNumber?: number;
+  sleeves: SleeveResponse[] | [];
+  searchValue: number;
 }>();
 
-const sleeveData = ref(<SleeveResponse[]>[]);
 
-const EMPTY_MESSAGE = ref(
-  'Keine Sleeves mit der angegebenen Satznummer gefunden. Bitte versuchen Sie es mit einer anderen Nummer.',
-);
-const number = Number(props.sequenceNumber);
+const EMPTY_MESSAGE = 'Keine Sleeves mit der angegebenen Satznummer gefunden. Bitte versuchen Sie es mit einer anderen Nummer.';
 
-const sleeveApi = new SleeveControllerApi();
-const testNumber: number = 1002;
+const localSearchValue = ref<number>(props.searchValue);
 
-async function getSleevesBySequenceNumber() {
-  console.log('Clicked');
-  try {
-    const response = await sleeveApi.getSleeveSequenceNumber(testNumber);
-    return (sleeveData.value = response.data);
-  } catch (e) {
-    console.error('Opps unexpected', e);
-    return [];
-  }
-}
+const emit = defineEmits<{
+  (e: 'search', value: number): void;
+}>();
 
-onMounted(async () => {
-  try {
-    const response = await sleeveApi.getSleeveSequenceNumber(number);
-    return (sleeveData.value = response.data);
-  } catch (e) {
-    console.error('Opps unexpected', e);
-    return [];
-  }
-});
+const items = computed(() => props.sleeves);
 
 const headers: DataTableHeader[] = [
   { title: 'Satz Nummer', key: 'sequenceNumber', align: 'start', sortable: false },
@@ -55,53 +37,65 @@ const headers: DataTableHeader[] = [
 </script>
 
 <template>
-  <v-btn @click="getSleevesBySequenceNumber" prepend-icon="$vuetify" variant="tonal">
-    Button
-  </v-btn>
-  <v-container>
-    <v-data-table-virtual :headers="headers" :items="sleeveData" item-value="id" :no-data-text="EMPTY_MESSAGE"
-      hide-default-footer show-expand>
-      <template #[`item.warehouse`]="{ item }">
-        {{ item.warehouse?.name }}
-      </template>
-      <template #[`item.manufactureDate`]="{ item }">
-        {{ formatDate(item.manufactureDate!) }}
-      </template>
-      <template #[`item.data-table-expand`]="{ internalItem, isExpanded, toggleExpand }">
-        <v-btn :append-icon="isExpanded(internalItem) ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-          :text="isExpanded(internalItem) ? 'Einklappen' : 'Mehr Infos'" class="text-none" color="medium-emphasis"
-          size="small" variant="text" border slim @click="toggleExpand(internalItem)"></v-btn>
-      </template>
+  <v-data-table-virtual :headers="headers" :items="items" item-value="id" :no-data-text="EMPTY_MESSAGE"
+    hide-default-footer show-expand>
+    <template #[`item.warehouse`]="{ item }">
+      {{ item.warehouse?.name }}
+    </template>
+    <template #[`item.manufactureDate`]="{ item }">
+      {{ formatDate(item.manufactureDate!) }}
+    </template>
+    <template #[`item.data-table-expand`]="{ internalItem, isExpanded, toggleExpand }">
+      <v-btn :append-icon="isExpanded(internalItem) ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+        :text="isExpanded(internalItem) ? 'Einklappen' : 'Mehr Infos'" class="text-none" color="medium-emphasis"
+        size="small" variant="text" border slim @click="toggleExpand(internalItem)"></v-btn>
+    </template>
 
-      <template v-slot:expanded-row="{ columns, item }">
-        <tr>
-          <td :colspan="columns.length" class="py-2">
-            <v-sheet rounded="lg" border>
-              <v-table density="compact">
-                <tbody class="bg-surface-light">
-                  <tr>
-                    <th>Anmerkungen</th>
-                    <th>Hersteller</th>
-                    <th>Zustand</th>
-                    <th>Km Stand</th>
-                    <th>Status</th>
-                  </tr>
-                </tbody>
+    <template v-slot:expanded-row="{ columns, item }">
+      <tr>
+        <td :colspan="columns.length" class="py-2">
+          <v-sheet rounded="lg" border>
+            <v-table density="compact">
+              <tbody class="bg-surface-light">
+                <tr>
+                  <th>Anmerkungen</th>
+                  <th>Hersteller</th>
+                  <th>Zustand</th>
+                  <th>Km Stand</th>
+                  <th>Status</th>
+                </tr>
+              </tbody>
 
-                <tbody>
-                  <tr>
-                    <td>{{ item.notes }}</td>
-                    <td>{{ item.manufacturer }}</td>
-                    <td>{{ item.condition }}</td>
-                    <td>{{ item.kmStand }} km</td>
-                    <td>{{ item.status }}</td>
-                  </tr>
-                </tbody>
-              </v-table>
-            </v-sheet>
-          </td>
-        </tr>
-      </template>
-    </v-data-table-virtual>
-  </v-container>
+              <tbody>
+                <tr>
+                  <td>{{ item.notes }}</td>
+                  <td>{{ item.manufacturer }}</td>
+                  <td>{{ item.condition }}</td>
+                  <td>{{ item.kmStand }} km</td>
+                  <td>{{ item.status }}</td>
+                </tr>
+              </tbody>
+            </v-table>
+          </v-sheet>
+        </td>
+      </tr>
+    </template>
+    <template v-slot:tfoot>
+      <tr>
+        <td>
+          <v-number-input v-model="localSearchValue" class="ma-lg-1 pa-0" variant="outlined" density="compact"
+            placeholder="Satz Nummer" hide-details></v-number-input>
+        </td>
+        <td>
+          <v-btn @click="emit('search', localSearchValue)" prepend-icon="$vuetify" variant="tonal"> Neu Suchen </v-btn>
+        </td>
+      </tr>
+    </template>
+  </v-data-table-virtual>
 </template>
+
+<style scoped>
+:deep(.v-number-input__control) {
+  display: none !important;
+}
+</style>
