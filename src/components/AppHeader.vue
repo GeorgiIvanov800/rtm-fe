@@ -3,21 +3,23 @@ import AppAvatar from './AppAvatar.vue';
 
 </script>
 <template>
-  <v-app-bar height="100" :elevation="22" color="#1565C0">
+  <v-app-bar height="60" :elevation="22" color="#1565C0">
     <template v-slot:prepend>
-      <v-app-bar-nav-icon>
+      <v-toolbar-items>
         <v-btn icon to="/" tag="router-link">
           <v-icon>mdi-home</v-icon>
         </v-btn>
-      </v-app-bar-nav-icon>
+        <v-btn text to="/create-sleeve" tag="router-link">
+          Създаване на ръкав
+        </v-btn>
+
+        <!-- В бъдеще можеш да добавиш още линкове тук -->
+      </v-toolbar-items>
     </template>
 
     <v-app-bar-title text="Rüst Team Manager">
     </v-app-bar-title>
-
-
     <AppAvatar />
-
   </v-app-bar>
 </template>
 
