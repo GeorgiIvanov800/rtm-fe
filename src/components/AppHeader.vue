@@ -9,11 +9,9 @@ import AppAvatar from './AppAvatar.vue';
         <v-btn icon to="/" tag="router-link">
           <v-icon>mdi-home</v-icon>
         </v-btn>
-        <v-btn text to="/create-sleeve" tag="router-link">
-          Създаване на ръкав
+        <v-btn text to="/manage/sleeves/:id?" tag="router-link">
+          Sleeve erstellen
         </v-btn>
-
-        <!-- В бъдеще можеш да добавиш още линкове тук -->
       </v-toolbar-items>
     </template>
 

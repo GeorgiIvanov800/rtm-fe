@@ -31,11 +31,10 @@ async function onSearch(): Promise<void> {
   <v-container class="pa-4 fill-height d-flex align-center justify-center">
     <v-row class="flex-column" align="center" justify="center">
       <v-col cols="12" md="8" lg="6">
-        <!-- Search Card -->
         <v-card elevation="2" class="mb-12">
           <v-card-title>
             <v-icon left>mdi-magnify</v-icon>
-            Suche Sleeve
+            Sleeve Satznummer Suchen
           </v-card-title>
           <v-card-text>
             <v-form ref="form" @submit.prevent>

@@ -34,5 +34,10 @@ export function useSleeveApi() {
     }
   }
 
+  // async function getSleeveBySleeveNumber(sleeveNumber:number) {
+  //   const resp = await api.getSleeveNumber(sleeveNumber);
+
+  // }
+
   return { sleeves, isLoading, error, fetchAll, createSleeve };
 }
