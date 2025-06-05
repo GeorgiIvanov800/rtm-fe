@@ -9,7 +9,7 @@ import AppAvatar from './AppAvatar.vue';
         <v-btn icon to="/" tag="router-link">
           <v-icon>mdi-home</v-icon>
         </v-btn>
-        <v-btn text to="/manage/sleeves/:id?" tag="router-link">
+        <v-btn text :to="{ name: 'MenageSleeve' }" tag="router-link">
           Sleeve erstellen
         </v-btn>
       </v-toolbar-items>
