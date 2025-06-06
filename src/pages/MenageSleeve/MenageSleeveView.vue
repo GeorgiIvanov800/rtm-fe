@@ -23,7 +23,7 @@ const isEdit = computed(() => Boolean(route.params.id));
 
 
 <template>
-  <h1>{{ isEdit ? 'Редакция на ръкав' : 'Нов ръкав' }}</h1>
+  <h1>{{ isEdit ? 'Edit Sleeve' : 'Neu Sleeve' }}</h1>
   <div v-if="error" class="text-red-500">{{ error }}</div>
   <SleeveForm />
 </template>

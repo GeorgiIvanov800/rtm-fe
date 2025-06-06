@@ -1,15 +1,17 @@
 <script lang="ts" setup>
 import { SaveSleeveRequestConditionEnum, SaveSleeveRequestTypeEnum, type SaveSleeveRequest } from '@/openapi';
-import { reactive, ref } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { VDateInput } from 'vuetify/labs/VDateInput';
 import { SleeveConditionDE } from '@/utils/translateTypes';
 import { computed } from 'vue';
 import { SleeveTypeDE } from '@/utils/translateTypes';
+import type { ValidationRule } from 'vuetify';
+import { useRules } from 'vuetify/labs/rules';
 
 const router = useRouter();
 
-const formData = reactive<SaveSleeveRequest>({
+const formData = ref<SaveSleeveRequest>({
   sequenceNumber: 0,
   sleeveNumber: 0,
   design: "",
@@ -25,9 +27,10 @@ const formData = reactive<SaveSleeveRequest>({
   warehouse: '',
   status: '',
   type: "FLAT",
-  condition: SaveSleeveRequestConditionEnum.New
+  condition: "NEW"
 });
 
+//Transle the types to German
 const typesOptions = computed<
   { value: SaveSleeveRequestTypeEnum; label: string; }[]
 >(() => {
@@ -53,7 +56,26 @@ const conditionOptions = computed<
 });
 
 
-const isValid = ref(false);
+
+
+// const sleeveRules = ref([
+//   v => !!v || "Bitte geben Sie die Farbe an."
+// ]);
+
+
+
+const sleeveRules: ValidationRule[] = [
+  (value: string): true | string => {
+    if (/^[0-9]+$/.test(value)) return true;
+    return 'Bitte geben Sie nur Nummern';
+  },
+];
+
+async function validate() {
+  console.log('Validate Clicked');
+  const { valid } = await formData.value.validate();
+
+}
 
 async function submit() {
   console.log('Sleeve Data: ', { ...formData });
@@ -78,7 +100,7 @@ function cancel() {
           </v-toolbar>
 
           <v-card-text>
-            <v-form ref="sleeveForm" v-model="isValid" lazy-validation>
+            <v-form ref="formData" validate-on="submit" @submit.prevent="submit">
               <v-row dense>
                 <v-col cols="12" sm="6">
                   <v-number-input v-model="formData.sequenceNumber" label="Satz Nummer" outlined dense />
@@ -87,7 +109,7 @@ function cancel() {
                   <v-number-input v-model="formData.sleeveNumber" label="Sleeve Nummer" outlined dense />
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="formData.color" label="Farbe" outlined dense />
+                  <v-text-field v-model="formData.color" :rules=[rules.required()] label="Farbe" outlined dense />
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-text-field v-model="formData.design" label="Motiv" outlined dense />
@@ -133,10 +155,11 @@ function cancel() {
 
           <v-card-actions>
             <v-spacer />
-            <v-btn :disabled="!isValid" color="primary" @click="submit">
-              Създай
+            <v-btn color="primary" @click="submit">
+              Speichern
             </v-btn>
-            <v-btn text @click="cancel">Откажи</v-btn>
+            <v-btn text @click="cancel">Zurück</v-btn>
+            <v-btn text @click="validate">Validate</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
