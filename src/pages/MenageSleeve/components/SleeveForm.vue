@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import { SaveSleeveRequestConditionEnum, type SaveSleeveRequest } from '@/openapi';
+import { SaveSleeveRequestConditionEnum, SaveSleeveRequestTypeEnum, type SaveSleeveRequest } from '@/openapi';
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { VDateInput } from 'vuetify/labs/VDateInput';
 import { SleeveConditionDE } from '@/utils/translateTypes';
 import { computed } from 'vue';
+import { SleeveTypeDE } from '@/utils/translateTypes';
 
 const router = useRouter();
 
@@ -27,7 +28,18 @@ const formData = reactive<SaveSleeveRequest>({
   condition: SaveSleeveRequestConditionEnum.New
 });
 
-const sleeveTypes: string[] = ['Lack', 'Vollflache Silikon', 'Ropot Silicon', 'Farbe'];
+const typesOptions = computed<
+  { value: SaveSleeveRequestTypeEnum; label: string; }[]
+>(() => {
+  return (
+    Object.entries(SleeveTypeDE) as [SaveSleeveRequestTypeEnum, string][]
+  ).map(([enumValue, germanLabel]) => ({
+    value: enumValue,
+    label: germanLabel,
+  }));
+});
+
+
 //Transle the condition to German
 const conditionOptions = computed<
   { value: SaveSleeveRequestConditionEnum; label: string; }[]
@@ -81,7 +93,8 @@ function cancel() {
                   <v-text-field v-model="formData.design" label="Motiv" outlined dense />
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-select v-model="formData.type" label="Sleeve typ" outlined dense :items=sleeveTypes />
+                  <v-select v-model="formData.type" label="Sleeve typ" outlined dense :items=typesOptions
+                    item-title="label" item-value="value" />
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-text-field v-model="formData.manufacturer" label="Hersteller" outlined dense />
