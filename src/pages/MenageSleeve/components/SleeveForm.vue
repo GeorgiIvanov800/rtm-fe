@@ -2,6 +2,7 @@
 import type { SaveSleeveRequest } from '@/openapi';
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { VDateInput } from 'vuetify/labs/VDateInput';
 
 
 const router = useRouter();
@@ -25,6 +26,9 @@ const formData = reactive<SaveSleeveRequest>({
   condition: 'NEW',
 });
 
+const sleeveTypes: string[] = ['Lack', 'Vollflache Silikon', 'Ropot Silicon', 'Farbe'];
+const sleeveZustand: string[] = ['Neu', 'Beschädigt', 'Genraucht'];
+
 const isValid = ref(false);
 
 async function submit() {
@@ -43,35 +47,59 @@ function cancel() {
     <v-row justify="center">
       <v-col cols="12" md="8" lg="6">
         <v-card elevation="2">
-          <!-- Заглавен бар на картата -->
           <v-toolbar flat color="primary">
             <v-toolbar-title class="white--text">
-              Нов ръкав
+              Neu Sleeve
             </v-toolbar-title>
           </v-toolbar>
 
           <v-card-text>
             <v-form ref="sleeveForm" v-model="isValid" lazy-validation>
               <v-row dense>
-                <!-- Поле: Име -->
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="formData.sequenceNumber" label="Satz Nummer" outlined dense />
+                  <v-number-input v-model="formData.sequenceNumber" label="Satz Nummer" outlined dense />
                 </v-col>
-
-                <!-- Поле: Цвят -->
                 <v-col cols="12" sm="6">
-                  <v-select v-model="formData.color" :items="['Бял', 'Черен', 'Син', 'Червен']" label="Цвят" outlined
-                    dense />
+                  <v-number-input v-model="formData.sleeveNumber" label="Sleeve Nummer" outlined dense />
                 </v-col>
-
-                <!-- Поле: Размер -->
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="formData.circumference" label="Размер" outlined dense />
+                  <v-text-field v-model="formData.color" label="Farbe" outlined dense />
                 </v-col>
-
-                <!-- Поле: Описание -->
+                <v-col cols="12" sm="6">
+                  <v-text-field v-model="formData.design" label="Motiv" outlined dense />
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-select v-model="formData.type" label="Sleeve typ" outlined dense :items=sleeveTypes />
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-text-field v-model="formData.manufacturer" label="Hersteller" outlined dense />
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-date-input clearable label="Herstellungsdatum"></v-date-input>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-number-input v-model="formData.gear" label="Zahnrad"></v-number-input>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-number-input v-model="formData.circumference" label="Umfang"></v-number-input>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-number-input v-model="formData.width" label="Breite"></v-number-input>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-number-input v-model="formData.kmStand" label="Km Stand"></v-number-input>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-text-field v-model="formData.warehouse" label="Lager" outlined dense />
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-number-input v-model="formData.kmStand" label="Lager Platz"></v-number-input>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-select v-model="formData.condition" label="Sleeve-Zustand" :items="sleeveZustand" outlined dense />
+                </v-col>
                 <v-col cols="12">
-                  <v-textarea v-model="formData.sleeveNumber" label="Описание" rows="3" outlined dense />
+                  <v-textarea v-model="formData.notes" label="Anmerkingen" rows="3" outlined dense />
                 </v-col>
               </v-row>
             </v-form>
@@ -89,3 +117,9 @@ function cancel() {
     </v-row>
   </v-container>
 </template>
+
+<style scoped>
+:deep(.v-number-input__control) {
+  display: none !important;
+}
+</style>
