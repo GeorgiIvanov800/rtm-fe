@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import type { SaveSleeveRequest } from '@/openapi';
+import { SaveSleeveRequestConditionEnum, type SaveSleeveRequest } from '@/openapi';
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { VDateInput } from 'vuetify/labs/VDateInput';
-
+import { SleeveConditionDE } from '@/utils/translateTypes';
+import { computed } from 'vue';
 
 const router = useRouter();
 
@@ -23,11 +24,22 @@ const formData = reactive<SaveSleeveRequest>({
   warehouse: '',
   status: '',
   type: "FLAT",
-  condition: 'NEW',
+  condition: SaveSleeveRequestConditionEnum.New
 });
 
 const sleeveTypes: string[] = ['Lack', 'Vollflache Silikon', 'Ropot Silicon', 'Farbe'];
-const sleeveZustand: string[] = ['Neu', 'Beschädigt', 'Genraucht'];
+//Transle the condition to German
+const conditionOptions = computed<
+  { value: SaveSleeveRequestConditionEnum; label: string; }[]
+>(() => {
+  return (
+    Object.entries(SleeveConditionDE) as [SaveSleeveRequestConditionEnum, string][]
+  ).map(([enumValue, germanLabel]) => ({
+    value: enumValue,
+    label: germanLabel,
+  }));
+});
+
 
 const isValid = ref(false);
 
@@ -96,7 +108,8 @@ function cancel() {
                   <v-number-input v-model="formData.kmStand" label="Lager Platz"></v-number-input>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-select v-model="formData.condition" label="Sleeve-Zustand" :items="sleeveZustand" outlined dense />
+                  <v-select v-model="formData.condition" label="Sleeve-Zustand" :items="conditionOptions"
+                    item-title="label" item-value="value" outlined dense />
                 </v-col>
                 <v-col cols="12">
                   <v-textarea v-model="formData.notes" label="Anmerkingen" rows="3" outlined dense />
