@@ -9,6 +9,6 @@ export const SleeveConditionDE: Record<SaveSleeveRequestConditionEnum, string> =
 export const SleeveTypeDE: Record<SaveSleeveRequestTypeEnum, string> = {
   [SaveSleeveRequestTypeEnum.Flat]: 'Vollfläche',
   [SaveSleeveRequestTypeEnum.Lack]: 'Lack',
-  [SaveSleeveRequestTypeEnum.NonFlat]: 'Ropot Silicon',
+  [SaveSleeveRequestTypeEnum.NonFlat]: 'Rapot Silicon',
   [SaveSleeveRequestTypeEnum.Paint]: 'Farbe',
 };

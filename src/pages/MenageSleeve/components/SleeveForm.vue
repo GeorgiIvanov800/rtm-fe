@@ -6,8 +6,6 @@ import { VDateInput } from 'vuetify/labs/VDateInput';
 import { SleeveConditionDE } from '@/utils/translateTypes';
 import { computed } from 'vue';
 import { SleeveTypeDE } from '@/utils/translateTypes';
-import type { ValidationRule } from 'vuetify';
-import { useRules } from 'vuetify/labs/rules';
 
 const router = useRouter();
 
@@ -55,27 +53,8 @@ const conditionOptions = computed<
   }));
 });
 
+const warehouseOptions: string[] = ["G", 'L1', "L3"];
 
-
-
-// const sleeveRules = ref([
-//   v => !!v || "Bitte geben Sie die Farbe an."
-// ]);
-
-
-
-const sleeveRules: ValidationRule[] = [
-  (value: string): true | string => {
-    if (/^[0-9]+$/.test(value)) return true;
-    return 'Bitte geben Sie nur Nummern';
-  },
-];
-
-async function validate() {
-  console.log('Validate Clicked');
-  const { valid } = await formData.value.validate();
-
-}
 
 async function submit() {
   console.log('Sleeve Data: ', { ...formData });
@@ -109,7 +88,7 @@ function cancel() {
                   <v-number-input v-model="formData.sleeveNumber" label="Sleeve Nummer" outlined dense />
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="formData.color" :rules=[rules.required()] label="Farbe" outlined dense />
+                  <v-text-field v-model="formData.color" label="Farbe" outlined dense />
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-text-field v-model="formData.design" label="Motiv" outlined dense />
@@ -137,7 +116,7 @@ function cancel() {
                   <v-number-input v-model="formData.kmStand" label="Km Stand"></v-number-input>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="formData.warehouse" label="Lager" outlined dense />
+                  <v-select v-model="formData.warehouse" label="Lager" :items="warehouseOptions" outlined dense />
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-number-input v-model="formData.kmStand" label="Lager Platz"></v-number-input>
@@ -159,7 +138,7 @@ function cancel() {
               Speichern
             </v-btn>
             <v-btn text @click="cancel">Zurück</v-btn>
-            <v-btn text @click="validate">Validate</v-btn>
+            <v-btn text>Validate</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
