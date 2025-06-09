@@ -14,12 +14,15 @@
   },
   "dependencies": {
     "@openapitools/openapi-generator-cli": "^2.20.2",
+    "@vee-validate/zod": "^4.15.1",
     "axios": "^1.9.0",
     "pinia": "^3.0.1",
+    "vee-validate": "^4.15.1",
     "vite-plugin-vuetify": "^2.1.1",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
-    "vuetify": "^3.8.6"
+    "vuetify": "^3.8.6",
+    "zod": "^3.25.56"
   },
   "devDependencies": {
     "@mdi/font": "^7.4.47",

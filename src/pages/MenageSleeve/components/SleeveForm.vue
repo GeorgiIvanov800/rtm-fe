@@ -1,20 +1,26 @@
 <script lang="ts" setup>
-import { SaveSleeveRequestConditionEnum, SaveSleeveRequestTypeEnum, type SaveSleeveRequest } from '@/openapi';
+import {
+  SaveSleeveRequestConditionEnum,
+  SaveSleeveRequestTypeEnum,
+  type SaveSleeveRequest,
+} from '@/openapi';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { VDateInput } from 'vuetify/labs/VDateInput';
 import { SleeveConditionDE } from '@/utils/translateTypes';
 import { computed } from 'vue';
 import { SleeveTypeDE } from '@/utils/translateTypes';
+import { useField, useForm } from 'vee-validate';
+import { validationSchema } from '@/utils/validations';
 
 const router = useRouter();
 
 const formData = ref<SaveSleeveRequest>({
   sequenceNumber: 0,
   sleeveNumber: 0,
-  design: "",
+  design: '',
   color: '',
-  manufacturer: "",
+  manufacturer: '',
   notes: '',
   gear: 0,
   circumference: 0,
@@ -24,42 +30,51 @@ const formData = ref<SaveSleeveRequest>({
   kmStand: 0,
   warehouse: '',
   status: '',
-  type: "FLAT",
-  condition: "NEW"
+  type: 'FLAT',
+  condition: 'NEW',
 });
 
 //Transle the types to German
-const typesOptions = computed<
-  { value: SaveSleeveRequestTypeEnum; label: string; }[]
->(() => {
-  return (
-    Object.entries(SleeveTypeDE) as [SaveSleeveRequestTypeEnum, string][]
-  ).map(([enumValue, germanLabel]) => ({
-    value: enumValue,
-    label: germanLabel,
-  }));
+const typesOptions = computed<{ value: SaveSleeveRequestTypeEnum; label: string; }[]>(() => {
+  return (Object.entries(SleeveTypeDE) as [SaveSleeveRequestTypeEnum, string][]).map(
+    ([enumValue, germanLabel]) => ({
+      value: enumValue,
+      label: germanLabel,
+    }),
+  );
 });
-
 
 //Transle the condition to German
-const conditionOptions = computed<
-  { value: SaveSleeveRequestConditionEnum; label: string; }[]
->(() => {
-  return (
-    Object.entries(SleeveConditionDE) as [SaveSleeveRequestConditionEnum, string][]
-  ).map(([enumValue, germanLabel]) => ({
-    value: enumValue,
-    label: germanLabel,
-  }));
+const conditionOptions = computed<{ value: SaveSleeveRequestConditionEnum; label: string; }[]>(
+  () => {
+    return (Object.entries(SleeveConditionDE) as [SaveSleeveRequestConditionEnum, string][]).map(
+      ([enumValue, germanLabel]) => ({
+        value: enumValue,
+        label: germanLabel,
+      }),
+    );
+  },
+);
+
+const warehouseOptions: string[] = ['G', 'L1', 'L3'];
+
+const { handleSubmit } = useForm<{
+  sequenceNumber: number;
+  sleeveNumber: number;
+
+}>({
+  validationSchema,
 });
 
-const warehouseOptions: string[] = ["G", 'L1', "L3"];
+
+const sequenceNumber = useField<number>('sequenceNumber');
+const sleeveNumber = useField<number>('sleeveNumber');
 
 
-async function submit() {
-  console.log('Sleeve Data: ', { ...formData });
-
-}
+const onSubmit = handleSubmit((values) => {
+  console.log('On Submit clicked');
+  alert(JSON.stringify(values, null, 2));
+});
 
 function cancel() {
   router.back();
@@ -73,19 +88,19 @@ function cancel() {
       <v-col cols="12" md="8" lg="6">
         <v-card elevation="2">
           <v-toolbar flat color="primary">
-            <v-toolbar-title class="white--text">
-              Neu Sleeve
-            </v-toolbar-title>
+            <v-toolbar-title class="white--text"> Neu Sleeve </v-toolbar-title>
           </v-toolbar>
 
           <v-card-text>
-            <v-form ref="formData" validate-on="submit" @submit.prevent="submit">
+            <form @submit.prevent="onSubmit">
               <v-row dense>
                 <v-col cols="12" sm="6">
-                  <v-number-input v-model="formData.sequenceNumber" label="Satz Nummer" outlined dense />
+                  <v-number-input v-model="sequenceNumber.value.value" label="Satz Nummer" outlined dense
+                    :error-messages="sequenceNumber.errorMessage.value ? [sequenceNumber.errorMessage.value] : []" />
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-number-input v-model="formData.sleeveNumber" label="Sleeve Nummer" outlined dense />
+                  <v-number-input v-model="sleeveNumber.value.value" label="Sleeve Nummer" outlined dense
+                    :error-messages="sleeveNumber.errorMessage.value ? [sleeveNumber.errorMessage.value] : []" />
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-text-field v-model="formData.color" label="Farbe" outlined dense />
@@ -94,7 +109,7 @@ function cancel() {
                   <v-text-field v-model="formData.design" label="Motiv" outlined dense />
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-select v-model="formData.type" label="Sleeve typ" outlined dense :items=typesOptions
+                  <v-select v-model="formData.type" label="Sleeve typ" outlined dense :items="typesOptions"
                     item-title="label" item-value="value" />
                 </v-col>
                 <v-col cols="12" sm="6">
@@ -129,17 +144,14 @@ function cancel() {
                   <v-textarea v-model="formData.notes" label="Anmerkingen" rows="3" outlined dense />
                 </v-col>
               </v-row>
-            </v-form>
+              <v-card-actions>
+                <v-spacer />
+                <v-btn color="primary" @click="onSubmit"> Speichern </v-btn>
+                <v-btn text @click="cancel">Zurück</v-btn>
+                <v-btn text>Validate</v-btn>
+              </v-card-actions>
+            </form>
           </v-card-text>
-
-          <v-card-actions>
-            <v-spacer />
-            <v-btn color="primary" @click="submit">
-              Speichern
-            </v-btn>
-            <v-btn text @click="cancel">Zurück</v-btn>
-            <v-btn text>Validate</v-btn>
-          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>

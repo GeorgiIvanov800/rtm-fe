@@ -13,7 +13,6 @@ import App from './App.vue';
 import router from './router';
 import { aliases, mdi } from 'vuetify/iconsets/mdi';
 import axiosInstance from './config/axios';
-import { createRulesPlugin } from 'vuetify/labs/rules';
 
 const app = createApp(App);
 
@@ -35,7 +34,6 @@ const vuetify = createVuetify({
 
 app.use(createPinia());
 app.use(vuetify);
-app.use(createRulesPlugin({}, vuetify.locale));
 app.use(router);
 app.config.globalProperties.$axios = axiosInstance;
 app.provide('axios', axiosInstance);
