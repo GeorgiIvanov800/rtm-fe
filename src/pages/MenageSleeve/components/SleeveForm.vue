@@ -88,16 +88,23 @@ const { value: circumference, errorMessage: circumferenceError } = useField<numb
 const { value: slot, errorMessage: slotError } = useField<number>('slot');
 const { value: width, errorMessage: widthError } = useField<number>('width');
 const { value: warehouse, errorMessage: warehouseError } = useField<string>('warehouse');
-const { value: type, errorMessage: typeError } = useField<string>('type');
-const { value: condition, errorMessage: conditionError } = useField<string>('condition');
+const { value: type, errorMessage: typeError } = useField<SaveSleeveRequestTypeEnum>('type');
+const { value: condition, errorMessage: conditionError } = useField<SaveSleeveRequestConditionEnum>('condition');
 const { value: manufactureDate } =
   useField<Date | null>('manufactureDate');
 
 
 const onSubmit = handleSubmit((values) => {
   console.log('On Submit clicked');
-  console.log(manufactureDate.value);
-  alert(JSON.stringify(values, null, 2));
+
+  const payload: SaveSleeveRequest = {
+    ...values,
+    manufactureDate: values.manufactureDate ? values.manufactureDate.toISOString().slice(0, 10) : '',
+    status: '',
+    notes: formData.value.notes,
+    kmStand: formData.value.kmStand,
+  };
+  console.log("Sending", payload);
 });
 
 function cancel() {
