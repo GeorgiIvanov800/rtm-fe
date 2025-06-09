@@ -78,18 +78,18 @@ const { handleSubmit } = useForm<{
 });
 
 
-const sequenceNumber = useField<number>('sequenceNumber');
-const sleeveNumber = useField<number>('sleeveNumber');
-const design = useField<string>('design');
-const color = useField<string>('color');
-const manufacturer = useField<string>('manufacturer');
-const gear = useField<number>('gear');
-const circumference = useField<number>('circumference');
-const slot = useField<number>('slot');
-const width = useField<number>('width');
-const warehouse = useField<string>('warehouse');
-const type = useField<string>('type');
-const condition = useField<string>('condition');
+const { value: sequenceNumber, errorMessage: sequenceNumberError } = useField<number>('sequenceNumber');
+const { value: sleeveNumber, errorMessage: sleeveNumberError } = useField<number>('sleeveNumber');
+const { value: design, errorMessage: designError } = useField<string>('design');
+const { value: color, errorMessage: colorError } = useField<string>('color');
+const { value: manufacturer, errorMessage: manufacturerError } = useField<string>('manufacturer');
+const { value: gear, errorMessage: gearError } = useField<number>('gear');
+const { value: circumference, errorMessage: circumferenceError } = useField<number>('circumference');
+const { value: slot, errorMessage: slotError } = useField<number>('slot');
+const { value: width, errorMessage: widthError } = useField<number>('width');
+const { value: warehouse, errorMessage: warehouseError } = useField<string>('warehouse');
+const { value: type, errorMessage: typeError } = useField<string>('type');
+const { value: condition, errorMessage: conditionError } = useField<string>('condition');
 const { value: manufactureDate } =
   useField<Date | null>('manufactureDate');
 
@@ -119,59 +119,53 @@ function cancel() {
             <form @submit.prevent="onSubmit">
               <v-row dense>
                 <v-col cols="12" sm="6">
-                  <v-number-input v-model="sequenceNumber.value.value" label="Satz Nummer" outlined dense
-                    :error-messages="sequenceNumber.errorMessage.value ? [sequenceNumber.errorMessage.value] : []" />
+                  <v-number-input v-model="sequenceNumber" label="Satz Nummer" outlined dense
+                    :error-messages="sequenceNumberError" />
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-number-input v-model="sleeveNumber.value.value" label="Sleeve Nummer" outlined dense
-                    :error-messages="sleeveNumber.errorMessage.value ? [sleeveNumber.errorMessage.value] : []" />
+                  <v-number-input v-model="sleeveNumber" label="Sleeve Nummer" outlined dense
+                    :error-messages="sleeveNumberError" />
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="color.value.value" label="Farbe" outlined dense
-                    :error-messages="color.errorMessage.value" />
+                  <v-text-field v-model="color" label="Farbe" outlined dense :error-messages="colorError" />
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="design.value.value" label="Motiv" outlined dense
-                    :error-messages="design.errorMessage.value" />
+                  <v-text-field v-model="design" label="Motiv" outlined dense :error-messages="designError" />
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-select v-model="type.value.value" label="Sleeve typ" outlined dense :items="typesOptions"
-                    item-title="label" item-value="value" :error-messages="type.errorMessage.value" />
+                  <v-select v-model="type" label="Sleeve typ" outlined dense :items="typesOptions" item-title="label"
+                    item-value="value" :error-messages="typeError" />
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="manufacturer.value.value" label="Hersteller" outlined dense
-                    :error-messages="manufacturer.errorMessage.value" />
+                  <v-text-field v-model="manufacturer" label="Hersteller" outlined dense
+                    :error-messages="manufacturerError" />
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-date-input v-model="manufactureDate" clearable label="Herstellungsdatum"></v-date-input>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-number-input v-model="gear.value.value" label="Zahnrad"
-                    :error-messages="gear.errorMessage.value"></v-number-input>
+                  <v-number-input v-model="gear" label="Zahnrad" :error-messages="gearError"></v-number-input>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-number-input v-model="circumference.value.value" label="Umfang"
-                    :error-messages="circumference.errorMessage.value"></v-number-input>
+                  <v-number-input v-model="circumference" label="Umfang"
+                    :error-messages="circumferenceError"></v-number-input>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-number-input v-model="width.value.value" label="Breite"
-                    :error-messages="width.errorMessage.value"></v-number-input>
+                  <v-number-input v-model="width" label="Breite" :error-messages="widthError"></v-number-input>
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-number-input v-model="formData.kmStand" label="Km Stand"></v-number-input>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-select v-model="warehouse.value.value" label="Lager" :items="warehouseOptions" outlined dense
-                    :error-messages="warehouse.errorMessage.value" />
+                  <v-select v-model="warehouse" label="Lager" :items="warehouseOptions" outlined dense
+                    :error-messages="warehouseError" />
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-number-input v-model="slot.value.value" label="Lager Platz"
-                    :error-messages="slot.errorMessage.value"></v-number-input>
+                  <v-number-input v-model="slot" label="Lager Platz" :error-messages="slotError"></v-number-input>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-select v-model="condition.value.value" label="Sleeve-Zustand" :items="conditionOptions"
-                    item-title="label" item-value="value" outlined dense
-                    :error-messages="condition.errorMessage.value" />
+                  <v-select v-model="condition" label="Sleeve-Zustand" :items="conditionOptions" item-title="label"
+                    item-value="value" outlined dense :error-messages="conditionError" />
                 </v-col>
                 <v-col cols="12">
                   <v-textarea v-model="formData.notes" label="Anmerkingen" rows="3" outlined dense />
@@ -179,7 +173,7 @@ function cancel() {
               </v-row>
               <v-card-actions>
                 <v-spacer />
-                <v-btn color="primary" @click="onSubmit"> Speichern </v-btn>
+                <v-btn color="primary" type="submit"> Speichern </v-btn>
                 <v-btn text @click="cancel">Zurück</v-btn>
                 <v-btn text>Validate</v-btn>
               </v-card-actions>
