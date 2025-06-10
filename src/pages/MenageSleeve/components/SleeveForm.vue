@@ -104,12 +104,17 @@ const onSubmit = handleSubmit((values) => {
     notes: formData.value.notes,
     kmStand: formData.value.kmStand,
   };
-  console.log("Sending", payload);
+  emit('save', payload);
 });
 
 function cancel() {
   router.back();
 }
+
+
+const emit = defineEmits<{
+  (e: 'save', payload: SaveSleeveRequest): void;
+}>();
 </script>
 
 <template>
@@ -182,7 +187,6 @@ function cancel() {
                 <v-spacer />
                 <v-btn color="primary" type="submit"> Speichern </v-btn>
                 <v-btn text @click="cancel">Zurück</v-btn>
-                <v-btn text>Validate</v-btn>
               </v-card-actions>
             </form>
           </v-card-text>

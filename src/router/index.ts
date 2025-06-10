@@ -6,7 +6,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 const routes = [
   { path: '/', name: 'home', component: HomeView },
   { path: '/sleeves', name: 'sleeves', component: SleeveView },
-  { path: '/manage/sleeves', name: 'MenageSleeve', component: ManageSleeveView },
+  { path: '/sleeves/create', name: 'MenageSleeve', component: ManageSleeveView },
 ];
 
 const router = createRouter({
