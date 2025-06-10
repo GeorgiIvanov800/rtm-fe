@@ -54,8 +54,8 @@ const { handleSubmit } = useForm<{
   slot: number;
   width: number;
   warehouse: string;
-  type: string;
-  condition: string;
+  type: SaveSleeveRequestTypeEnum;
+  condition: SaveSleeveRequestConditionEnum;
   manufactureDate: Date | null;
   kmStand: number;
   notes: string;
