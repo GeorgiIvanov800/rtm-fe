@@ -4,7 +4,6 @@ import {
   SaveSleeveRequestTypeEnum,
   type SaveSleeveRequest,
 } from '@/openapi';
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { VDateInput } from 'vuetify/labs/VDateInput';
 import { SleeveConditionDE } from '@/utils/translateTypes';
@@ -14,25 +13,11 @@ import { useField, useForm } from 'vee-validate';
 import { validationSchema } from '@/utils/validations';
 
 const router = useRouter();
+const emit = defineEmits<{
+  (e: 'save', payload: SaveSleeveRequest): void;
+}>();
 
-const formData = ref<SaveSleeveRequest>({
-  sequenceNumber: 0,
-  sleeveNumber: 0,
-  design: '',
-  color: '',
-  manufacturer: '',
-  notes: '',
-  gear: 0,
-  circumference: 0,
-  slot: 0,
-  manufactureDate: '',
-  width: 0,
-  kmStand: 0,
-  warehouse: '',
-  status: '',
-  type: 'FLAT',
-  condition: 'NEW',
-});
+
 
 //Transle the types to German
 const typesOptions = computed<{ value: SaveSleeveRequestTypeEnum; label: string; }[]>(() => {
@@ -72,6 +57,8 @@ const { handleSubmit } = useForm<{
   type: string;
   condition: string;
   manufactureDate: Date | null;
+  kmStand: number;
+  notes: string;
 
 }>({
   validationSchema,
@@ -90,8 +77,9 @@ const { value: width, errorMessage: widthError } = useField<number>('width');
 const { value: warehouse, errorMessage: warehouseError } = useField<string>('warehouse');
 const { value: type, errorMessage: typeError } = useField<SaveSleeveRequestTypeEnum>('type');
 const { value: condition, errorMessage: conditionError } = useField<SaveSleeveRequestConditionEnum>('condition');
-const { value: manufactureDate } =
-  useField<Date | null>('manufactureDate');
+const { value: manufactureDate } = useField<Date | null>('manufactureDate');
+const { value: kmStand } = useField<number>('kmStand');
+const { value: notes } = useField<string>('notes');
 
 
 const onSubmit = handleSubmit((values) => {
@@ -100,9 +88,6 @@ const onSubmit = handleSubmit((values) => {
   const payload: SaveSleeveRequest = {
     ...values,
     manufactureDate: values.manufactureDate ? values.manufactureDate.toISOString().slice(0, 10) : '',
-    status: '',
-    notes: formData.value.notes,
-    kmStand: formData.value.kmStand,
   };
   emit('save', payload);
 });
@@ -111,10 +96,6 @@ function cancel() {
   router.back();
 }
 
-
-const emit = defineEmits<{
-  (e: 'save', payload: SaveSleeveRequest): void;
-}>();
 </script>
 
 <template>
@@ -166,7 +147,7 @@ const emit = defineEmits<{
                   <v-number-input v-model="width" label="Breite" :error-messages="widthError"></v-number-input>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-number-input v-model="formData.kmStand" label="Km Stand"></v-number-input>
+                  <v-number-input v-model="kmStand" label="Km Stand"></v-number-input>
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-select v-model="warehouse" label="Lager" :items="warehouseOptions" outlined dense
@@ -180,7 +161,7 @@ const emit = defineEmits<{
                     item-value="value" outlined dense :error-messages="conditionError" />
                 </v-col>
                 <v-col cols="12">
-                  <v-textarea v-model="formData.notes" label="Anmerkingen" rows="3" outlined dense />
+                  <v-textarea v-model="notes" label="Anmerkingen" rows="3" outlined dense />
                 </v-col>
               </v-row>
               <v-card-actions>
