@@ -83,7 +83,6 @@ const { value: notes } = useField<string>('notes');
 
 
 const onSubmit = handleSubmit((values) => {
-  console.log('On Submit clicked');
 
   const payload: SaveSleeveRequest = {
     ...values,
