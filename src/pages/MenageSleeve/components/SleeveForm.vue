@@ -29,7 +29,7 @@ const typesOptions = computed<{ value: SaveSleeveRequestTypeEnum; label: string;
   );
 });
 
-//Transle the condition to German
+//Transle the conditions to German
 const conditionOptions = computed<{ value: SaveSleeveRequestConditionEnum; label: string; }[]>(
   () => {
     return (Object.entries(SleeveConditionDE) as [SaveSleeveRequestConditionEnum, string][]).map(

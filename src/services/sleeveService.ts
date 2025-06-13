@@ -3,7 +3,6 @@ import { SleeveControllerApi, type SaveSleeveRequest, type SleeveResponse } from
 const api = new SleeveControllerApi();
 
 export function getAllSleevesBySequenceNumber(seq: number): Promise<SleeveResponse[]> {
-  console.log('Fetch called');
   return api.getSleeveSequenceNumber(seq).then((response) => response.data);
 }
 
