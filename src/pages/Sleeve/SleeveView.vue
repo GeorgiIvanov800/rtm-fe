@@ -2,36 +2,55 @@
 import { useRoute, useRouter } from 'vue-router';
 import SleeveTable from './components/SleeveTable.vue';
 import { onMounted, ref } from 'vue';
-import { type SleeveResponse, SleeveControllerApi } from '@/openapi';
+import { type SleeveResponse } from '@/openapi';
+import { useLoadingStore } from '@/stores/loading';
+import { getAllSleevesBySequenceNumber } from '@/services/sleeveService';
+import { watch } from 'vue';
 
 const route = useRoute();
 const router = useRouter();
-const searchValue = ref<number>(Number(route.query.sleeveSequence));
-
+const searchValue = ref<number>(Number(route.query.sleeveSequence) || 0);
+const isLoading = useLoadingStore();
 const sleeveData = ref(<SleeveResponse[]>[]);
-const sleeveApi = new SleeveControllerApi();
+const error = ref<string | null>(null);
 
-async function loadData(): Promise<SleeveResponse[]> {
+
+
+async function fetchSleeves() {
+
+  isLoading.startLoading();
+  error.value = null;
   try {
-    const response = await sleeveApi.getSleeveSequenceNumber(searchValue.value);
-
-    if (response.status === 204) {
-      return (sleeveData.value = []);
+    sleeveData.value = await getAllSleevesBySequenceNumber(searchValue.value);
+    if (sleeveData.value.length === 0) {
+      return sleeveData.value = [];
     }
-    return (sleeveData.value = response.data);
-  } catch (e) {
-    console.error('Error', e);
-    return [];
+  } catch (err: any) {
+    error.value = err.message;
+  } finally {
+    isLoading.stopLoading();
   }
+
 }
 
 function onSearch(newValue: number) {
   searchValue.value = newValue;
   router.push({ query: { ...route.query, sleeveSequence: newValue } });
-  loadData();
 }
 
-onMounted(loadData);
+onMounted(fetchSleeves);
+
+watch(() => route.query.sleeveSequence,
+
+  (newSeq, oldSeq) => {
+    const seqNumber = Number(newSeq);
+    if (isNaN(seqNumber)) {
+      return;
+    }
+    searchValue.value = seqNumber;
+    fetchSleeves();
+  }
+);
 </script>
 
 <template>

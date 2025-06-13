@@ -1,43 +1,12 @@
 import { SleeveControllerApi, type SaveSleeveRequest, type SleeveResponse } from '@/openapi';
-import { ref } from 'vue';
 
-export function useSleeveApi() {
-  const sleeves = ref<SleeveResponse[]>([]);
-  const error = ref<string | null>(null);
-  const isLoading = ref(false);
-  const api = new SleeveControllerApi();
+const api = new SleeveControllerApi();
 
-  async function fetchAll(sequenceNumber: number) {
-    error.value = null;
+export function getAllSleevesBySequenceNumber(seq: number): Promise<SleeveResponse[]> {
+  console.log('Fetch called');
+  return api.getSleeveSequenceNumber(seq).then((response) => response.data);
+}
 
-    try {
-      const resp = await api.getSleeveSequenceNumber(sequenceNumber);
-      sleeves.value = resp.data;
-    } catch (err: any) {
-      error.value = err.message || 'Unknown error.';
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  async function createSleeve(dto: SaveSleeveRequest) {
-    isLoading.value = true;
-    error.value = null;
-
-    try {
-      const { data } = await api.saveSleeve(dto);
-      sleeves.value.push(data);
-    } catch (err: any) {
-      error.value = err.message || 'Unknow Error for Create Sleeve';
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  // async function getSleeveBySleeveNumber(sleeveNumber:number) {
-  //   const resp = await api.getSleeveNumber(sleeveNumber);
-
-  // }
-
-  return { sleeves, isLoading, error, fetchAll, createSleeve };
+export function saveSleeve(dto: SaveSleeveRequest): Promise<SleeveResponse> {
+  return api.saveSleeve(dto).then((response) => response.data);
 }

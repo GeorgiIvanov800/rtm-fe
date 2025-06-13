@@ -9,14 +9,14 @@ import { onMounted } from 'vue';
 const route = useRoute();
 // const router = useRouter();
 
-const { sleeves, isLoading, error, fetchAll, createSleeve } = useSleeveApi();
+// const { sleeves, isLoading, error, getAllSleevesBySequenceNumber, createSleeve } = useSleeveApi();
 
 const isEdit = computed(() => Boolean(route.params.id));
 // const original = computed(() => sleeves.value.find(sleeve => sleeve.id === Number(route.params.id)));
 
-function handleSave(payload: SaveSleeveRequest): void {
-  createSleeve(payload);
-}
+// function handleSave(payload: SaveSleeveRequest): void {
+//   createSleeve(payload);
+// }
 
 
 </script>
