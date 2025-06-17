@@ -3,6 +3,7 @@ import {
   SaveSleeveRequestConditionEnum,
   SaveSleeveRequestTypeEnum,
   type SaveSleeveRequest,
+  type SleeveResponse,
 } from '@/openapi';
 import { useRouter } from 'vue-router';
 import { VDateInput } from 'vuetify/labs/VDateInput';
@@ -11,14 +12,14 @@ import { computed } from 'vue';
 import { SleeveTypeDE } from '@/utils/translateTypes';
 import { useField, useForm } from 'vee-validate';
 import { validationSchema } from '@/utils/validations';
-
+import { format } from 'date-fns';
 const router = useRouter();
 const emit = defineEmits<{
   (e: 'save', payload: SaveSleeveRequest): void;
 }>();
 
 const props = defineProps<{
-  initialData: SaveSleeveRequest | null;
+  initialData: SleeveResponse | null;
 }>();
 
 //Transle the types to German
@@ -74,10 +75,10 @@ const { value: notes } = useField<string>('notes');
 
 
 const onSubmit = handleSubmit((values) => {
-
+  const formatedDate = format(values.manufactureDate, 'yyyy-MM-dd');
   const payload: SaveSleeveRequest = {
     ...values,
-    manufactureDate: values.manufactureDate ? values.manufactureDate.toISOString().slice(0, 10) : '',
+    manufactureDate: formatedDate,
   };
   emit('save', payload);
 });

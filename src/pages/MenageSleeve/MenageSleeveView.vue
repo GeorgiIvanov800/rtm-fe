@@ -2,7 +2,7 @@
 import { useRoute } from 'vue-router';
 import SleeveForm from './components/SleeveForm.vue';
 import { saveSleeve, getSleeveBySleeveNumber } from '@/services/sleeveService';
-import type { SaveSleeveRequest } from '@/openapi';
+import type { SaveSleeveRequest, SleeveResponse } from '@/openapi';
 import { computed, ref } from 'vue';
 import { onMounted } from 'vue';
 import { useLoadingStore } from '@/stores/loading';
@@ -12,7 +12,7 @@ const route = useRoute();
 const loadingStore = useLoadingStore();
 const error = ref<string | null>(null);
 const isEdit = computed(() => Boolean(route.params.id));
-const sleeveToEdit = ref<SaveSleeveRequest | null>(null);
+const sleeveToEdit = ref<SleeveResponse | null>(null);
 
 onMounted(() => {
   if (isEdit.value) {
@@ -22,8 +22,16 @@ onMounted(() => {
 });
 
 async function handleSave(payload: SaveSleeveRequest): Promise<void> {
+
   loadingStore.startLoading();
   error.value = null;
+
+  if (isEdit.value) {
+    const sleeveId = sleeveToEdit.value?.id;
+    console.log('Sleeve Id:', sleeveId);
+    return;
+  }
+
   try {
     const created = await saveSleeve(payload);
   } catch (err: any) {
