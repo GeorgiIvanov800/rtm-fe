@@ -7,6 +7,7 @@ import { computed } from 'vue';
 import { SleeveTypeDE, SleeveConditionDE } from '@/utils/translateTypes';
 
 
+
 const props = defineProps<{
   sleeves: SleeveResponse[] | [];
   searchValue: number;
@@ -20,6 +21,7 @@ const localSearchValue = ref<number>(props.searchValue);
 const emit = defineEmits<{
   (e: 'search', value: number): void;
   (e: 'redirect'): void;
+  (e: 'edit', value: number): void;
 }>();
 
 const items = computed(() => props.sleeves);
@@ -112,7 +114,8 @@ const headers: DataTableHeader[] = [
     </template>
     <template v-slot:[`item.actions`]="{ item }">
       <div class="d-flex ga-2 justify-end">
-        <v-icon color="medium-emphasis" icon="mdi-pencil" size="small"></v-icon>
+        <v-icon color="medium-emphasis" icon="mdi-pencil" size="small"
+          @click="emit('edit', Number(item.sleeveNumber))"></v-icon>
 
         <v-icon color="medium-emphasis" icon="mdi-delete" size="small"></v-icon>
       </div>

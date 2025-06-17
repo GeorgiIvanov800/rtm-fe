@@ -44,7 +44,7 @@ async function onSearch(): Promise<void> {
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn @click="onSearch" prepend-icon="$vuetify" color="primary" variant="outlined" rounded="xl"
+            <v-btn @click="onSearch" prepend-icon="mdi-magnify" color="primary" variant="outlined" rounded="xl"
               size="x-large">
               Suchen
             </v-btn>
