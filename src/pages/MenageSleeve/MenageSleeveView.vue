@@ -16,11 +16,11 @@ const error = ref<string | null>(null);
 const isEdit = computed(() => Boolean(route.params.id));
 // const original = computed(() => sleeves.value.find(sleeve => sleeve.id === Number(route.params.id)));
 
-function handleSave(payload: SaveSleeveRequest): void {
+async function handleSave(payload: SaveSleeveRequest): Promise<void> {
   isLoading.startLoading();
   error.value = null;
   try {
-    saveSleeve(payload);
+    const created = await saveSleeve(payload);
   } catch (err: any) {
     error.value = err.message;
 

@@ -39,7 +39,7 @@ async function onSearch(): Promise<void> {
           <v-card-text>
             <v-form ref="form" @submit.prevent>
               <v-text-field v-model="searchValue" :rules="numericRules" label="Bitte Sleeve Satznummer Eingeben"
-                clearable />
+                clearable @keyup.enter="onSearch" />
             </v-form>
           </v-card-text>
           <v-card-actions>
