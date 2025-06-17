@@ -34,7 +34,6 @@ async function handleSave(payload: SaveSleeveRequest): Promise<void> {
 
 
 <template>
-  <h1>{{ isEdit ? 'Edit Sleeve' : 'Neu Sleeve' }}</h1>
   <div v-if="error" class="text-red-500">{{ error }}</div>
   <SleeveForm @save="handleSave" />
 </template>

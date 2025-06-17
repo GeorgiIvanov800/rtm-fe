@@ -38,6 +38,10 @@ function onSearch(newValue: number) {
   router.push({ query: { ...route.query, sleeveSequence: newValue } });
 }
 
+function onRedirect(): void {
+  router.push('/sleeves/create');
+}
+
 onMounted(fetchSleeves);
 
 watch(() => route.query.sleeveSequence,
@@ -56,7 +60,7 @@ watch(() => route.query.sleeveSequence,
 <template>
   <v-sheet class="pa-8 elevation-4 rounded-lg" color="surface">
     <v-container>
-      <SleeveTable :sleeves="sleeveData" :search-value="searchValue" @search="onSearch" />
+      <SleeveTable :sleeves="sleeveData" :search-value="searchValue" @search="onSearch" @redirect="onRedirect" />
     </v-container>
   </v-sheet>
 </template>

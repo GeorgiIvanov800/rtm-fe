@@ -19,6 +19,7 @@ const localSearchValue = ref<number>(props.searchValue);
 
 const emit = defineEmits<{
   (e: 'search', value: number): void;
+  (e: 'redirect'): void;
 }>();
 
 const items = computed(() => props.sleeves);
@@ -55,6 +56,16 @@ const headers: DataTableHeader[] = [
 <template>
   <v-data-table-virtual :headers="headers" :items="items" item-value="id" :no-data-text="EMPTY_MESSAGE"
     hide-default-footer show-expand>
+    <template v-slot:top>
+      <v-toolbar flat>
+        <v-toolbar-title>
+          <v-icon color="medium-emphasis" icon="mdi-cog" size="large" start></v-icon>
+          Sleeves
+        </v-toolbar-title>
+        <v-btn class="me-2" prepend-icon="mdi-plus" rounded="lg" text="Neu Sleeve Erstelen" border
+          @click="emit('redirect')"></v-btn>
+      </v-toolbar>
+    </template>
     <template v-slot:[`item.type`]="{ item }">
       {{ translateSleeveType(item.type) }}
     </template>
