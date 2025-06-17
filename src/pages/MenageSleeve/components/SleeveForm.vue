@@ -17,7 +17,9 @@ const emit = defineEmits<{
   (e: 'save', payload: SaveSleeveRequest): void;
 }>();
 
-
+const props = defineProps<{
+  initialData: SaveSleeveRequest | null;
+}>();
 
 //Transle the types to German
 const typesOptions = computed<{ value: SaveSleeveRequestTypeEnum; label: string; }[]>(() => {
@@ -41,27 +43,16 @@ const conditionOptions = computed<{ value: SaveSleeveRequestConditionEnum; label
   },
 );
 
-const warehouseOptions: string[] = ['G', 'L1', 'L3'];
+const warehouseOptions = [
+  { id: 1, name: 'L3' },
+  { id: 2, name: 'L1' },
+  { id: 3, name: 'G' },
+];
 
-const { handleSubmit } = useForm<{
-  sequenceNumber: number;
-  sleeveNumber: number;
-  design: string;
-  color: string;
-  manufacturer: string;
-  gear: number;
-  circumference: number;
-  slot: number;
-  width: number;
-  warehouse: string;
-  type: SaveSleeveRequestTypeEnum;
-  condition: SaveSleeveRequestConditionEnum;
-  manufactureDate: Date | null;
-  kmStand: number;
-  notes: string;
 
-}>({
+const { handleSubmit } = useForm<SaveSleeveRequest>({
   validationSchema,
+  initialValues: props.initialData,
 });
 
 
@@ -148,7 +139,7 @@ function cancel() {
                   <v-number-input v-model="kmStand" label="Km Stand"></v-number-input>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-select v-model="warehouse" label="Lager" :items="warehouseOptions" outlined dense
+                  <v-select v-model="warehouse" label="Lager" :items="warehouseOptions" item-title="name" outlined dense
                     :error-messages="warehouseError" />
                 </v-col>
                 <v-col cols="12" sm="6">

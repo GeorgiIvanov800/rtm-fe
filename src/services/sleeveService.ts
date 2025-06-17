@@ -10,6 +10,6 @@ export function saveSleeve(dto: SaveSleeveRequest): Promise<SleeveResponse> {
   return api.saveSleeve(dto).then((response) => response.data);
 }
 
-export function getSleeveBySleeveNumber(sleeveNumber: number): Promise<SleeveResponse> {
+export function getSleeveBySleeveNumber(sleeveNumber: number): Promise<SaveSleeveRequest> {
   return api.getSleeveNumber(sleeveNumber).then((response) => response.data);
 }
