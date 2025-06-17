@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { type DataTableHeader } from 'vuetify';
 import { formatDate } from '@/utils/formatDate';
-import type { SaveSleeveRequestConditionEnum, SaveSleeveRequestTypeEnum, SleeveResponse, SleeveResponseConditionEnum, SleeveResponseTypeEnum } from '@/openapi';
+import type { SleeveResponse, SleeveResponseConditionEnum, SleeveResponseTypeEnum } from '@/openapi';
 import { ref } from 'vue';
 import { computed } from 'vue';
 import { SleeveTypeDE, SleeveConditionDE } from '@/utils/translateTypes';
@@ -48,6 +48,7 @@ const headers: DataTableHeader[] = [
   { title: 'Breite', key: 'width', sortable: false },
   { title: 'Sleeve Number', key: 'sleeveNumber', sortable: false },
   { title: 'Datum', key: 'manufactureDate', align: 'end', sortable: true },
+  { title: 'Actions', key: 'actions', align: 'end', sortable: false },
 ];
 </script>
 
@@ -98,6 +99,13 @@ const headers: DataTableHeader[] = [
         </td>
       </tr>
     </template>
+    <template v-slot:[`item.actions`]="{ item }">
+      <div class="d-flex ga-2 justify-end">
+        <v-icon color="medium-emphasis" icon="mdi-pencil" size="small"></v-icon>
+
+        <v-icon color="medium-emphasis" icon="mdi-delete" size="small"></v-icon>
+      </div>
+    </template>
     <template v-slot:tfoot>
       <tr>
         <td>
@@ -105,7 +113,8 @@ const headers: DataTableHeader[] = [
             placeholder="Satz Nummer" hide-details @keyup.enter="emit('search', localSearchValue)"></v-number-input>
         </td>
         <td>
-          <v-btn @click="emit('search', localSearchValue)" prepend-icon="$vuetify" variant="tonal"> Neu Suchen </v-btn>
+          <v-btn @click="emit('search', localSearchValue)" prepend-icon="$vuetify" variant="tonal"> Neu Suchen
+          </v-btn>
         </td>
       </tr>
     </template>
