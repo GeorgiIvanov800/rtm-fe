@@ -102,7 +102,7 @@ const headers: DataTableHeader[] = [
       <tr>
         <td>
           <v-number-input v-model="localSearchValue" class="ma-lg-1 pa-0" variant="outlined" density="compact"
-            placeholder="Satz Nummer" hide-details></v-number-input>
+            placeholder="Satz Nummer" hide-details @keyup.enter="emit('search', localSearchValue)"></v-number-input>
         </td>
         <td>
           <v-btn @click="emit('search', localSearchValue)" prepend-icon="$vuetify" variant="tonal"> Neu Suchen </v-btn>
