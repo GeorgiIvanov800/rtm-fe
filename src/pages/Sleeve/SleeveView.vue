@@ -6,7 +6,7 @@ import { type SleeveResponse } from '@/openapi';
 import { useLoadingStore } from '@/stores/loading';
 import { getAllSleevesBySequenceNumber } from '@/services/sleeveService';
 import { watch } from 'vue';
-import { number } from 'zod/v4';
+
 
 const route = useRoute();
 const router = useRouter();
@@ -43,10 +43,11 @@ function onRedirect(): void {
   router.push('/sleeves/create');
 }
 
-function onEdit(value: number) {
-  console.log('On Edit Clicked. SleeveNumber:', value);
-
+function onEdit(sleeveNumber: number) {
+  router.push(`/sleeves/edit/${sleeveNumber}`);
 }
+
+// '/sleeves/edit/:id'
 
 onMounted(fetchSleeves);
 

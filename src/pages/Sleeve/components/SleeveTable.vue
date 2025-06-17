@@ -115,7 +115,7 @@ const headers: DataTableHeader[] = [
     <template v-slot:[`item.actions`]="{ item }">
       <div class="d-flex ga-2 justify-end">
         <v-icon color="medium-emphasis" icon="mdi-pencil" size="small"
-          @click="emit('edit', Number(item.sleeveNumber))"></v-icon>
+          @click="emit('edit', item.sleeveNumber!)"></v-icon>
 
         <v-icon color="medium-emphasis" icon="mdi-delete" size="small"></v-icon>
       </div>
