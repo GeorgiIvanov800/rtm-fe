@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useRoute, useRouter } from 'vue-router';
 import SleeveForm from './components/SleeveForm.vue';
-import { saveSleeve } from '@/services/sleeveService';
+import { saveSleeve, getSleeveBySleeveNumber } from '@/services/sleeveService';
 import type { SaveSleeveRequest } from '@/openapi';
 import { computed, ref } from 'vue';
 import { onMounted } from 'vue';
@@ -14,7 +14,13 @@ const isLoading = useLoadingStore();
 const error = ref<string | null>(null);
 
 const isEdit = computed(() => Boolean(route.params.id));
-// const original = computed(() => sleeves.value.find(sleeve => sleeve.id === Number(route.params.id)));
+
+onMounted(() => {
+  if (isEdit.value) {
+    const sleeveNumber = Number(route.params.id);
+    getSleeve(sleeveNumber);
+  }
+});
 
 async function handleSave(payload: SaveSleeveRequest): Promise<void> {
   isLoading.startLoading();
@@ -29,6 +35,16 @@ async function handleSave(payload: SaveSleeveRequest): Promise<void> {
   }
 }
 
+async function getSleeve(sleeveNumber: number) {
+  try {
+    console.log("FETCH SLEEVE ");
+    const editSleeve = await getSleeveBySleeveNumber(sleeveNumber);
+    console.log(editSleeve);
+  }
+  catch (err: any) {
+    console.log(error);
+  }
+}
 
 </script>
 

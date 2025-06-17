@@ -47,8 +47,6 @@ function onEdit(sleeveNumber: number) {
   router.push(`/sleeves/edit/${sleeveNumber}`);
 }
 
-// '/sleeves/edit/:id'
-
 onMounted(fetchSleeves);
 
 watch(() => route.query.sleeveSequence,
