@@ -98,7 +98,6 @@ function cancel() {
 </script>
 
 <template>
-  <h1>Sleeve Form Works</h1>
   <v-container class="pa-4" fluid>
     <v-row justify="center">
       <v-col cols="12" md="8" lg="6">

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { type DataTableHeader } from 'vuetify';
 import { formatDate } from '@/utils/formatDate';
-import type { SleeveResponse } from '@/openapi';
+import type { SaveSleeveRequestConditionEnum, SaveSleeveRequestTypeEnum, SleeveResponse, SleeveResponseConditionEnum, SleeveResponseTypeEnum } from '@/openapi';
 import { ref } from 'vue';
 import { computed } from 'vue';
+import { SleeveTypeDE, SleeveConditionDE } from '@/utils/translateTypes';
 
 
 const props = defineProps<{
@@ -22,6 +23,20 @@ const emit = defineEmits<{
 
 const items = computed(() => props.sleeves);
 
+const translateSleeveType = (type: SleeveResponseTypeEnum | undefined): string => {
+  if (type === undefined) {
+    return 'N/A';
+  }
+  return SleeveTypeDE[type] || type;
+};
+
+const translateSleeveCondition = (type: SleeveResponseConditionEnum | undefined): string => {
+  if (type === undefined) {
+    return 'N/A';
+  }
+  return SleeveConditionDE[type] || type;
+};
+
 const headers: DataTableHeader[] = [
   { title: 'Satz Nummer', key: 'sequenceNumber', align: 'start', sortable: false },
   { title: 'Type', key: 'type', align: 'start', sortable: false },
@@ -39,6 +54,9 @@ const headers: DataTableHeader[] = [
 <template>
   <v-data-table-virtual :headers="headers" :items="items" item-value="id" :no-data-text="EMPTY_MESSAGE"
     hide-default-footer show-expand>
+    <template v-slot:[`item.type`]="{ item }">
+      {{ translateSleeveType(item.type) }}
+    </template>
     <template #[`item.warehouse`]="{ item }">
       {{ item.warehouse?.name }}
     </template>
@@ -70,7 +88,7 @@ const headers: DataTableHeader[] = [
                 <tr>
                   <td>{{ item.notes }}</td>
                   <td>{{ item.manufacturer }}</td>
-                  <td>{{ item.condition }}</td>
+                  <td>{{ translateSleeveCondition(item.condition) }}</td>
                   <td>{{ item.kmStand }} km</td>
                   <td>{{ item.status }}</td>
                 </tr>
