@@ -6,6 +6,8 @@ import type { SaveSleeveRequest, SleeveResponse } from '@/openapi';
 import { computed, ref } from 'vue';
 import { onMounted } from 'vue';
 import { useLoadingStore } from '@/stores/loading';
+import AppDialog from '@/components/AppDialog.vue';
+import { useDialogStore } from '@/stores/dialogStore';
 
 
 const route = useRoute();
@@ -13,6 +15,7 @@ const loadingStore = useLoadingStore();
 const error = ref<string | null>(null);
 const isEdit = computed(() => Boolean(route.params.id));
 const sleeveToEdit = ref<SleeveResponse | null>(null);
+const dialogStore = useDialogStore();
 
 onMounted(() => {
   if (isEdit.value) {
@@ -23,7 +26,6 @@ onMounted(() => {
 
 async function handleSave(payload: SaveSleeveRequest): Promise<void> {
 
-  // loadingStore.startLoading();
   error.value = null;
 
   if (isEdit.value) {
@@ -34,7 +36,8 @@ async function handleSave(payload: SaveSleeveRequest): Promise<void> {
   }
 
   try {
-    const created = await saveSleeve(payload);
+    await saveSleeve(payload);
+    dialogStore.showDialog('Success', 'Save Sleeve success', 'success');
   } catch (err: any) {
     error.value = err.message;
 
@@ -64,4 +67,5 @@ async function getSleeve(sleeveNumber: number) {
   <div v-if="loadingStore.isLoading">
   </div>
   <SleeveForm v-else @save="handleSave" :initial-data="sleeveToEdit" />
+  <AppDialog />
 </template>
