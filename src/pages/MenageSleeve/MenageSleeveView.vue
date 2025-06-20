@@ -23,12 +23,13 @@ onMounted(() => {
 
 async function handleSave(payload: SaveSleeveRequest): Promise<void> {
 
-  loadingStore.startLoading();
+  // loadingStore.startLoading();
   error.value = null;
 
   if (isEdit.value) {
     const sleeveId = sleeveToEdit.value?.id;
     console.log('Sleeve Id:', sleeveId);
+    console.log('Sleeve PayLoad:', payload);
     return;
   }
 
