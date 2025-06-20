@@ -8,7 +8,7 @@ import { onMounted } from 'vue';
 import { useLoadingStore } from '@/stores/loading';
 import AppDialog from '@/components/AppDialog.vue';
 import { useDialogStore } from '@/stores/dialogStore';
-
+import axios, { isAxiosError } from 'axios';
 
 const route = useRoute();
 const loadingStore = useLoadingStore();
@@ -29,18 +29,22 @@ async function handleSave(payload: SaveSleeveRequest): Promise<void> {
   error.value = null;
 
   if (isEdit.value) {
-    const sleeveId = sleeveToEdit.value?.id;
-    console.log('Sleeve Id:', sleeveId);
-    console.log('Sleeve PayLoad:', payload);
     return;
   }
 
   try {
     await saveSleeve(payload);
     dialogStore.showDialog('Success', 'Save Sleeve success', 'success');
-  } catch (err: any) {
-    error.value = err.message;
+  } catch (err: unknown) {
 
+    if (isAxiosError(err)) {
+      const message = err.response?.data?.message;
+      error.value = message;
+      dialogStore.showDialog('Error', message, 'error');
+    } else if (err instanceof Error) {
+      error.value = err.message;
+      dialogStore.showDialog('Error', 'Unexpected Error Please', 'error');
+    }
   } finally {
     loadingStore.stopLoading();
   }

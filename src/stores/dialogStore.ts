@@ -8,7 +8,7 @@ export const useDialogStore = defineStore('dialog', {
     color: '',
   }),
   actions: {
-    showDialog(title: string, message: string, color: string) {
+    showDialog(title: string, message: string | '', color: string) {
       this.isVisible = true;
       this.title = title;
       this.message = message;
