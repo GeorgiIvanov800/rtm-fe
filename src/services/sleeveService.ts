@@ -14,6 +14,6 @@ export function getSleeveBySleeveNumber(sleeveNumber: number): Promise<SleeveRes
   return api.getSleeveNumber(sleeveNumber).then((response) => response.data);
 }
 
-// export function updateSleeve(dto: SaveSleeveRequest): Promise<SleeveResponse> {
-//   return api.updateSleeve(dto., requestBody).then((response) =>response.data);
-// }
+export function updateSleeve(id: number, dto: Partial<SaveSleeveRequest>): Promise<SleeveResponse> {
+  return api.updateSleeve(id, dto).then((response) => response.data);
+}

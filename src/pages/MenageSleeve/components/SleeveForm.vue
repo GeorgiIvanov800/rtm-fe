@@ -127,7 +127,6 @@ const onSubmit = handleSubmit((formValues) => {
     formKeys.forEach((key) => {
       const currentValue = formValues[key];
       const initialValue = formInitialValues.value![key];
-
       if (currentValue !== initialValue) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (changedFields as any)[key] = currentValue;
