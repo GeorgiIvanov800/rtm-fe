@@ -16,11 +16,37 @@ import { format } from 'date-fns';
 const router = useRouter();
 const emit = defineEmits<{
   (e: 'save', payload: SaveSleeveRequest): void;
+  (e: 'update', payload: Partial<SaveSleeveRequest>): void;
 }>();
 
 const props = defineProps<{
   initialData: SleeveResponse | null;
 }>();
+
+const formInitialValues = computed(() => {
+  if (!props.initialData) {
+    return undefined;
+  }
+
+  const initialValuesForForm: SaveSleeveRequest = {
+    sequenceNumber: props.initialData.sequenceNumber ?? 0,
+    sleeveNumber: props.initialData.sleeveNumber ?? 0,
+    design: props.initialData.design ?? '',
+    color: props.initialData.color ?? '',
+    manufacturer: props.initialData.manufacturer ?? '',
+    gear: props.initialData.gear ?? 0,
+    circumference: props.initialData.circumference ?? 0,
+    slot: props.initialData.slot ?? 0,
+    width: props.initialData.width ?? 0,
+    warehouse: props.initialData.warehouse?.name ?? '',
+    type: props.initialData.type ?? SaveSleeveRequestTypeEnum.Paint,
+    condition: props.initialData.condition ?? SaveSleeveRequestConditionEnum.New,
+    manufactureDate: props.initialData.manufactureDate ?? '',
+    kmStand: props.initialData.kmStand,
+    notes: props.initialData.notes,
+  };
+  return initialValuesForForm;
+});
 
 //Transle the types to German
 const typesOptions = computed<{ value: SaveSleeveRequestTypeEnum; label: string; }[]>(() => {
@@ -52,7 +78,7 @@ const warehouseOptions = [
 
 const { handleSubmit } = useForm<SaveSleeveRequest>({
   validationSchema,
-  initialValues: props.initialData,
+  initialValues: formInitialValues.value,
 });
 
 const { value: sequenceNumber, errorMessage: sequenceNumberError } =
@@ -66,21 +92,55 @@ const { value: circumference, errorMessage: circumferenceError } =
   useField<number>('circumference');
 const { value: slot, errorMessage: slotError } = useField<number>('slot');
 const { value: width, errorMessage: widthError } = useField<number>('width');
-const { value: warehouse, errorMessage: warehouseError } = useField<string>('warehouse');
+const { value: warehouseName, errorMessage: warehouseError } = useField<string>('warehouse');
 const { value: type, errorMessage: typeError } = useField<SaveSleeveRequestTypeEnum>('type');
 const { value: condition, errorMessage: conditionError } =
   useField<SaveSleeveRequestConditionEnum>('condition');
-const { value: manufactureDate } = useField<Date | null>('manufactureDate');
+const { value: manufactureDateString } = useField<string | null>('manufactureDate');
 const { value: kmStand } = useField<number>('kmStand');
 const { value: notes } = useField<string>('notes');
 
-const onSubmit = handleSubmit((values) => {
-  const formatedDate = format(values.manufactureDate, 'yyyy-MM-dd');
-  const payload: SaveSleeveRequest = {
-    ...values,
-    manufactureDate: formatedDate,
-  };
-  emit('save', payload);
+const dateForPicker = computed({
+  get(): Date | null {
+    return manufactureDateString.value ? new Date(manufactureDateString.value) : null;
+  },
+  set(newValue: Date | null) {
+    manufactureDateString.value = newValue ? format(newValue, 'yyyy-MM-dd') : null;
+  },
+});
+
+const warehouseForPicker = computed({
+  get() {
+    return warehouseOptions.find((opt) => opt.name === warehouseName.value) || null;
+  },
+  set(newValue: { id: number; name: string; } | null) {
+    warehouseName.value = newValue ? newValue.name : '';
+  },
+});
+
+const onSubmit = handleSubmit((formValues) => {
+  if (props.initialData && formInitialValues.value) {
+    const changedFields: Partial<SaveSleeveRequest> = {};
+
+    const formKeys = Object.keys(formValues) as Array<keyof SaveSleeveRequest>;
+
+    formKeys.forEach((key) => {
+      const currentValue = formValues[key];
+      const initialValue = formInitialValues.value![key];
+
+      if (currentValue !== initialValue) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (changedFields as any)[key] = currentValue;
+      }
+    });
+
+    emit('update', changedFields);
+  } else {
+    const payload: SaveSleeveRequest = {
+      ...formValues,
+    };
+    emit('save', payload);
+  }
 });
 
 function cancel() {
@@ -122,7 +182,7 @@ function cancel() {
                     :error-messages="manufacturerError" />
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-date-input v-model="manufactureDate" clearable label="Herstellungsdatum"></v-date-input>
+                  <v-date-input v-model="dateForPicker" clearable label="Herstellungsdatum"></v-date-input>
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-number-input v-model="gear" label="Zahnrad" :error-messages="gearError"></v-number-input>
@@ -138,8 +198,8 @@ function cancel() {
                   <v-number-input v-model="kmStand" label="Km Stand"></v-number-input>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-select v-model="warehouse" label="Lager" :items="warehouseOptions" item-title="name" outlined dense
-                    :error-messages="warehouseError" />
+                  <v-select v-model="warehouseForPicker" label="Lager" :items="warehouseOptions" item-title="name"
+                    return-object outlined dense :error-messages="warehouseError" />
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-number-input v-model="slot" label="Lager Platz" :error-messages="slotError"></v-number-input>

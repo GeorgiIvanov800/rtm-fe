@@ -66,12 +66,17 @@ async function getSleeve(sleeveNumber: number) {
   }
 }
 
+async function handleUpdate(payload: SaveSleeveRequest): Promise<void> {
+
+
+}
+
 </script>
 
 
 <template>
   <div v-if="loadingStore.isLoading">
   </div>
-  <SleeveForm v-else @save="handleSave" :initial-data="sleeveToEdit" />
+  <SleeveForm v-else @save="handleSave" :initial-data="sleeveToEdit" @update="handleUpdate" />
   <AppDialog />
 </template>

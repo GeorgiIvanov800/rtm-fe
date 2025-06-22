@@ -13,3 +13,7 @@ export function saveSleeve(dto: SaveSleeveRequest): Promise<SleeveResponse> {
 export function getSleeveBySleeveNumber(sleeveNumber: number): Promise<SleeveResponse> {
   return api.getSleeveNumber(sleeveNumber).then((response) => response.data);
 }
+
+// export function updateSleeve(dto: SaveSleeveRequest): Promise<SleeveResponse> {
+//   return api.updateSleeve(dto., requestBody).then((response) =>response.data);
+// }
