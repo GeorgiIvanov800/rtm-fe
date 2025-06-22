@@ -154,7 +154,8 @@ function cancel() {
               </v-row>
               <v-card-actions>
                 <v-spacer />
-                <v-btn color="primary" type="submit"> Speichern </v-btn>
+                <v-btn v-if="initialData?.id" color="primary" type="submit"> Aktualisieren </v-btn>
+                <v-btn v-else color="primary" type="submit"> Speichern </v-btn>
                 <v-btn text @click="cancel">Zurück</v-btn>
               </v-card-actions>
             </form>
