@@ -56,8 +56,11 @@ async function getSleeve(sleeveNumber: number) {
   try {
     sleeveToEdit.value = await getSleeveBySleeveNumber(sleeveNumber);
   }
-  catch (err: any) {
-    error.value = err.message;
+  catch (err: unknown) {
+    if (isAxiosError(err)) {
+      error.value = err.message;
+    }
+
   } finally {
     loadingStore.stopLoading();
   }
@@ -67,7 +70,6 @@ async function getSleeve(sleeveNumber: number) {
 
 
 <template>
-  <div v-if="error" class="text-red-500">{{ error }}</div>
   <div v-if="loadingStore.isLoading">
   </div>
   <SleeveForm v-else @save="handleSave" :initial-data="sleeveToEdit" />

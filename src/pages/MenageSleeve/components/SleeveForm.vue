@@ -50,29 +50,29 @@ const warehouseOptions = [
   { id: 3, name: 'G' },
 ];
 
-
 const { handleSubmit } = useForm<SaveSleeveRequest>({
   validationSchema,
   initialValues: props.initialData,
 });
 
-
-const { value: sequenceNumber, errorMessage: sequenceNumberError } = useField<number>('sequenceNumber');
+const { value: sequenceNumber, errorMessage: sequenceNumberError } =
+  useField<number>('sequenceNumber');
 const { value: sleeveNumber, errorMessage: sleeveNumberError } = useField<number>('sleeveNumber');
 const { value: design, errorMessage: designError } = useField<string>('design');
 const { value: color, errorMessage: colorError } = useField<string>('color');
 const { value: manufacturer, errorMessage: manufacturerError } = useField<string>('manufacturer');
 const { value: gear, errorMessage: gearError } = useField<number>('gear');
-const { value: circumference, errorMessage: circumferenceError } = useField<number>('circumference');
+const { value: circumference, errorMessage: circumferenceError } =
+  useField<number>('circumference');
 const { value: slot, errorMessage: slotError } = useField<number>('slot');
 const { value: width, errorMessage: widthError } = useField<number>('width');
 const { value: warehouse, errorMessage: warehouseError } = useField<string>('warehouse');
 const { value: type, errorMessage: typeError } = useField<SaveSleeveRequestTypeEnum>('type');
-const { value: condition, errorMessage: conditionError } = useField<SaveSleeveRequestConditionEnum>('condition');
+const { value: condition, errorMessage: conditionError } =
+  useField<SaveSleeveRequestConditionEnum>('condition');
 const { value: manufactureDate } = useField<Date | null>('manufactureDate');
 const { value: kmStand } = useField<number>('kmStand');
 const { value: notes } = useField<string>('notes');
-
 
 const onSubmit = handleSubmit((values) => {
   const formatedDate = format(values.manufactureDate, 'yyyy-MM-dd');
@@ -86,7 +86,6 @@ const onSubmit = handleSubmit((values) => {
 function cancel() {
   router.back();
 }
-
 </script>
 
 <template>
@@ -97,7 +96,6 @@ function cancel() {
           <v-toolbar flat color="primary">
             <v-toolbar-title class="white--text"> Neu Sleeve </v-toolbar-title>
           </v-toolbar>
-
           <v-card-text>
             <form @submit.prevent="onSubmit">
               <v-row dense>
