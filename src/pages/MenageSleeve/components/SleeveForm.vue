@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import {
   SaveSleeveRequestConditionEnum,
   SaveSleeveRequestTypeEnum,
@@ -13,6 +13,8 @@ import { SleeveTypeDE } from '@/utils/translateTypes';
 import { useField, useForm } from 'vee-validate';
 import { validationSchema } from '@/utils/validations';
 import { format } from 'date-fns';
+import { createSelectOptions, getChangedFields } from '@/utils/form-helper';
+
 const router = useRouter();
 const emit = defineEmits<{
   (e: 'save', payload: SaveSleeveRequest): void;
@@ -49,26 +51,11 @@ const formInitialValues = computed(() => {
 });
 
 //Transle the types to German
-const typesOptions = computed<{ value: SaveSleeveRequestTypeEnum; label: string; }[]>(() => {
-  return (Object.entries(SleeveTypeDE) as [SaveSleeveRequestTypeEnum, string][]).map(
-    ([enumValue, germanLabel]) => ({
-      value: enumValue,
-      label: germanLabel,
-    }),
-  );
-});
+const typesOptions = computed(() => createSelectOptions(SleeveTypeDE));
 
 //Transle the conditions to German
-const conditionOptions = computed<{ value: SaveSleeveRequestConditionEnum; label: string; }[]>(
-  () => {
-    return (Object.entries(SleeveConditionDE) as [SaveSleeveRequestConditionEnum, string][]).map(
-      ([enumValue, germanLabel]) => ({
-        value: enumValue,
-        label: germanLabel,
-      }),
-    );
-  },
-);
+const conditionOptions = computed(() => createSelectOptions(SleeveConditionDE));
+
 
 const warehouseOptions = [
   { id: 1, name: 'L3' },
@@ -120,18 +107,8 @@ const warehouseForPicker = computed({
 
 const onSubmit = handleSubmit((formValues) => {
   if (props.initialData && formInitialValues.value) {
-    const changedFields: Partial<SaveSleeveRequest> = {};
 
-    const formKeys = Object.keys(formValues) as Array<keyof SaveSleeveRequest>;
-
-    formKeys.forEach((key) => {
-      const currentValue = formValues[key];
-      const initialValue = formInitialValues.value![key];
-      if (currentValue !== initialValue) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (changedFields as any)[key] = currentValue;
-      }
-    });
+    const changedFields = getChangedFields(formValues, formInitialValues.value);
 
     emit('update', changedFields);
   } else {
@@ -156,7 +133,7 @@ function cancel() {
             <v-toolbar-title class="white--text"> Neu Sleeve </v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <form @submit.prevent="onSubmit">
+            <v-form @submit.prevent="onSubmit">
               <v-row dense>
                 <v-col cols="12" sm="6">
                   <v-number-input v-model="sequenceNumber" label="Satz Nummer" outlined dense
@@ -217,7 +194,7 @@ function cancel() {
                 <v-btn v-else color="primary" type="submit"> Speichern </v-btn>
                 <v-btn text @click="cancel">Zurück</v-btn>
               </v-card-actions>
-            </form>
+            </v-form>
           </v-card-text>
         </v-card>
       </v-col>

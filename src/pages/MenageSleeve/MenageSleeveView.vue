@@ -82,7 +82,7 @@ async function handleUpdate(payload: Partial<SaveSleeveRequest>): Promise<void> 
       dialogStore.showDialog('Error', message, 'error');
     } else if (err instanceof Error) {
       error.value = err.message;
-      dialogStore.showDialog('Error', 'Unexpected Error Please', 'error');
+      dialogStore.showDialog('Error', 'Unexpected Error', 'error');
     }
   } finally {
     loadingStore.stopLoading();
