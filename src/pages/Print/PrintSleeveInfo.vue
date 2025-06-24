@@ -10,11 +10,12 @@ const route = useRoute();
 const sleeve = ref<SleeveResponse>();
 const error = ref<string | null>(null);
 const loadingStore = useLoadingStore();
-const sleeveNumber = Number(route.params.id);
+const sleeveNumber = ref<number>(Number(route.query.sleeveNumber) || 0);
 const dateTime = new Date().toLocaleDateString();
 
 onMounted(() => {
-  getSleeve(sleeveNumber);
+  console.log('Sleeve Number from PRINT ', sleeveNumber.value);
+  getSleeve(sleeveNumber.value);
 });
 
 async function getSleeve(sleeveNumber: number) {

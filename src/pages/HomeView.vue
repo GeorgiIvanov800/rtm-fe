@@ -31,8 +31,8 @@ async function onSearch(): Promise<void> {
 async function onPrint(): Promise<void> {
   const result = await printForm.value?.validate();
   if (result?.valid) {
-    console.log('Sleeve Nmmer ', printValue.value);
-    // router.push({ path: 'sleeves/print', query: { sleeveNummer: printValue.value } });
+    console.log('PrintValue FROM HOME', printValue);
+    router.push({ path: 'sleeves/print', query: { sleeveNumber: printValue.value } });
   }
 
 }
