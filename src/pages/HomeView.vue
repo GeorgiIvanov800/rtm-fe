@@ -25,6 +25,11 @@ async function onSearch(): Promise<void> {
     return;
   }
 }
+
+function onPrint(): void {
+  router.push('sleeves/print');
+}
+
 </script>
 
 <template>
@@ -62,7 +67,7 @@ async function onSearch(): Promise<void> {
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn color="secondary"> Print Note </v-btn>
+            <v-btn @click="onPrint" color="secondary"> Print Note </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>

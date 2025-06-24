@@ -1,4 +1,36 @@
 <script setup lang="ts">
+import type { SleeveResponse } from '@/openapi';
+import { getSleeveBySleeveNumber } from '@/services/sleeveService';
+import { useLoadingStore } from '@/stores/loading';
+import { isAxiosError } from 'axios';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const sleeve = ref<SleeveResponse>();
+const error = ref<string | null>(null);
+const loadingStore = useLoadingStore();
+const sleeveNumber = Number(route.params.id);
+const dateTime = new Date().toLocaleDateString();
+
+onMounted(() => {
+  getSleeve(sleeveNumber);
+});
+
+async function getSleeve(sleeveNumber: number) {
+  loadingStore.startLoading();
+  error.value = null;
+  try {
+    sleeve.value = await getSleeveBySleeveNumber(sleeveNumber);
+  } catch (err: unknown) {
+    if (isAxiosError(err)) {
+      error.value = err.message;
+    }
+  } finally {
+    loadingStore.stopLoading();
+  }
+}
+
 </script>
 
 <template>
@@ -12,40 +44,40 @@
 
           <div class="top-info-container">
             <div class="detail-box">
-              <div class="box-label">Произведено на</div>
-              <div class="box-value">20.06.2025</div>
+              <div class="box-label">Herrstelungsdatum</div>
+              <div class="box-value">{{ sleeve?.manufactureDate }}</div>
             </div>
             <div class="detail-box">
-              <div class="box-label">Склад</div>
-              <div class="box-value">L1</div>
+              <div class="box-label">Lager</div>
+              <div class="box-value">{{ sleeve?.warehouse?.name }} / {{ sleeve?.slot }}</div>
             </div>
           </div>
 
-          <div class="sleeve-number">123456</div>
+          <div class="sleeve-number">{{ sleeve?.sequenceNumber }}</div>
         </div>
 
         <div class="grid-box">
           <div class="box-label">Umfang / Zahnrad</div>
-          <div class="box-value">250mm / 120z</div>
+          <div class="box-value">{{ sleeve?.circumference }}mm / {{ sleeve?.gear }}</div>
         </div>
 
         <div class="grid-box">
           <div class="box-label">Farbbezeichnung</div>
-          <div class="box-value">Сребърен металик</div>
+          <div class="box-value">{{ sleeve?.color }}</div>
         </div>
 
         <div class="grid-box">
           <div class="box-label">Motiv Beschreibung</div>
-          <div class="box-value">Muster-Design 2025</div>
+          <div class="box-value">{{ sleeve?.design }}</div>
         </div>
 
         <div class="grid-box">
-          <div class="box-label">Дата на печат</div>
-          <div class="box-value">24.06.2025</div>
+          <div class="box-label">Letzter Einsatz</div>
+          <div class="box-value">{{ dateTime }}</div>
         </div>
 
         <div class="grid-box" style="grid-column: 1 / 3; text-align: center;">
-          <div class="box-label">Принтирано от</div>
+          <div class="box-label">Gereingt vom</div>
           <div class="box-value">Иван Иванов</div>
         </div>
 
@@ -102,13 +134,13 @@ body {
   position: relative;
 }
 
-/* --- ФИНАЛНА КОРЕКЦИЯ --- */
+
 .top-box .top-info-container {
   position: absolute;
   top: 0;
   right: 0;
   display: flex;
-  /* Премахнати са 'gap' и 'padding' за плътно прилепване */
+
 }
 
 .top-box .sleeve-number {
