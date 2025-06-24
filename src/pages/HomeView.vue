@@ -6,7 +6,9 @@ import type { VForm } from 'vuetify/lib/components/VForm/VForm.mjs';
 
 
 const form = ref<InstanceType<typeof VForm> | null>(null);
+const printForm = ref<InstanceType<typeof VForm> | null>(null);
 const searchValue = ref('');
+const printValue = ref('');
 const router: Router = useRouter();
 
 const numericRules: ValidationRule[] = [
@@ -26,8 +28,13 @@ async function onSearch(): Promise<void> {
   }
 }
 
-function onPrint(): void {
-  router.push('sleeves/print');
+async function onPrint(): Promise<void> {
+  const result = await printForm.value?.validate();
+  if (result?.valid) {
+    console.log('Sleeve Nmmer ', printValue.value);
+    // router.push({ path: 'sleeves/print', query: { sleeveNummer: printValue.value } });
+  }
+
 }
 
 </script>
@@ -64,6 +71,10 @@ function onPrint(): void {
           </v-card-title>
           <v-card-text>
             Generate and print a note for picking sleeves from the warehouse.
+            <v-form ref="printForm" @submit.prevent>
+              <v-text-field v-model="printValue" :rules="numericRules" label="Bitte Sleeve Nummer Eingeben" clearable
+                @keyup.enter="onPrint" />
+            </v-form>
           </v-card-text>
           <v-card-actions>
             <v-spacer />
