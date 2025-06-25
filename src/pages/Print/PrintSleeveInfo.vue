@@ -5,7 +5,9 @@ import { useLoadingStore } from '@/stores/loading';
 import { isAxiosError } from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { format, compareAsc, parseJSON } from "date-fns";
+import { format } from "date-fns";
+import { useDialogStore } from '@/stores/dialogStore';
+import AppDialog from '@/components/AppDialog.vue';
 
 const route = useRoute();
 const sleeve = ref<SleeveResponse>();
@@ -14,6 +16,9 @@ const loadingStore = useLoadingStore();
 const sleeveNumber = ref<number>(Number(route.query.sleeveNumber) || 0);
 const dateTime = format(new Date().toLocaleDateString(), "dd/MM/yyyy");
 let manufactureDate: string = '';
+
+const dialogStore = useDialogStore();
+
 onMounted(() => {
   getSleeve(sleeveNumber.value);
 });
@@ -21,13 +26,14 @@ onMounted(() => {
 async function getSleeve(sleeveNumber: number) {
   loadingStore.startLoading();
   error.value = null;
+
   try {
     sleeve.value = await getSleeveBySleeveNumber(sleeveNumber);
-    console.log(sleeve.value);
     manufactureDate = format(new Date(sleeve.value.manufactureDate!), "dd/MM/yyyy");
   } catch (err: unknown) {
     if (isAxiosError(err)) {
-      error.value = err.message;
+      error.value = err.response?.data.message;
+      dialogStore.showDialog("Ooops", error.value!, 'red');
     }
   } finally {
     loadingStore.stopLoading();
@@ -86,7 +92,7 @@ async function getSleeve(sleeveNumber: number) {
 
       </div>
     </div>
-
+    <AppDialog />
   </body>
 </template>
 

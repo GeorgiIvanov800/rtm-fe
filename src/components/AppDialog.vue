@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useDialogStore } from '@/stores/dialogStore';
+import { useRouter } from 'vue-router';
 const dialogStore = useDialogStore();
+const router = useRouter();
 
 
 </script>

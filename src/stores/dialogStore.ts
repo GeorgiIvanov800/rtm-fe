@@ -1,4 +1,6 @@
+import router from '@/router';
 import { defineStore } from 'pinia';
+import { useRouter } from 'vue-router';
 
 export const useDialogStore = defineStore('dialog', {
   state: () => ({
@@ -6,6 +8,7 @@ export const useDialogStore = defineStore('dialog', {
     title: '',
     message: '',
     color: '',
+    router: useRouter(),
   }),
   actions: {
     showDialog(title: string, message: string | '', color: string) {
@@ -16,6 +19,7 @@ export const useDialogStore = defineStore('dialog', {
     },
     hideDialog() {
       this.isVisible = false;
+      this.router.back();
     },
   },
 });
