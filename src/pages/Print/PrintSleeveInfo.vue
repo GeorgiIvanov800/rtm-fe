@@ -5,16 +5,16 @@ import { useLoadingStore } from '@/stores/loading';
 import { isAxiosError } from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { format, compareAsc, parseJSON } from "date-fns";
 
 const route = useRoute();
 const sleeve = ref<SleeveResponse>();
 const error = ref<string | null>(null);
 const loadingStore = useLoadingStore();
 const sleeveNumber = ref<number>(Number(route.query.sleeveNumber) || 0);
-const dateTime = new Date().toLocaleDateString();
-
+const dateTime = format(new Date().toLocaleDateString(), "dd/MM/yyyy");
+let manufactureDate: string = '';
 onMounted(() => {
-  console.log('Sleeve Number from PRINT ', sleeveNumber.value);
   getSleeve(sleeveNumber.value);
 });
 
@@ -23,6 +23,8 @@ async function getSleeve(sleeveNumber: number) {
   error.value = null;
   try {
     sleeve.value = await getSleeveBySleeveNumber(sleeveNumber);
+    console.log(sleeve.value);
+    manufactureDate = format(new Date(sleeve.value.manufactureDate!), "dd/MM/yyyy");
   } catch (err: unknown) {
     if (isAxiosError(err)) {
       error.value = err.message;
@@ -46,7 +48,7 @@ async function getSleeve(sleeveNumber: number) {
           <div class="top-info-container">
             <div class="detail-box">
               <div class="box-label">Herrstelungsdatum</div>
-              <div class="box-value">{{ sleeve?.manufactureDate }}</div>
+              <div class="box-value">{{ manufactureDate }}</div>
             </div>
             <div class="detail-box">
               <div class="box-label">Lager</div>
