@@ -62,8 +62,6 @@ async function onPrint(): Promise<void> {
             </v-btn>
           </v-card-actions>
         </v-card>
-
-        <!-- Print Note Card -->
         <v-card elevation="2">
           <v-card-title>
             <v-icon left>mdi-printer</v-icon>

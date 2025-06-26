@@ -1,4 +1,3 @@
-import router from '@/router';
 import { defineStore } from 'pinia';
 import { useRouter } from 'vue-router';
 

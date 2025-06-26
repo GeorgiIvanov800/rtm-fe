@@ -4,7 +4,7 @@ import SleeveTable from './components/SleeveTable.vue';
 import { onMounted, ref } from 'vue';
 import { type SleeveResponse } from '@/openapi';
 import { useLoadingStore } from '@/stores/loading';
-import { getAllSleevesBySequenceNumber } from '@/services/sleeveService';
+import { getAllSleevesBySequenceNumber, deleteSleeve } from '@/services/sleeveService';
 import { watch } from 'vue';
 
 
@@ -47,6 +47,12 @@ function onEdit(sleeveNumber: number) {
   router.push(`/sleeves/edit/${sleeveNumber}`);
 }
 
+function onDelete(sleeveId: number) {
+  error.value = null;
+
+
+}
+
 onMounted(fetchSleeves);
 
 watch(() => route.query.sleeveSequence,
@@ -66,7 +72,7 @@ watch(() => route.query.sleeveSequence,
   <v-sheet class="pa-8 elevation-4 rounded-lg" color="surface">
     <v-container>
       <SleeveTable :sleeves="sleeveData" :search-value="searchValue" @search="onSearch" @redirect="onRedirect"
-        @edit="onEdit" />
+        @edit="onEdit" @delete="onDelete" />
     </v-container>
   </v-sheet>
 </template>

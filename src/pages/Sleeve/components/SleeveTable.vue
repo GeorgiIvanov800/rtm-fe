@@ -22,6 +22,7 @@ const emit = defineEmits<{
   (e: 'search', value: number): void;
   (e: 'redirect'): void;
   (e: 'edit', value: number): void;
+  (e: 'delete', value: number): void;
 }>();
 
 const items = computed(() => props.sleeves);
@@ -117,7 +118,7 @@ const headers: DataTableHeader[] = [
         <v-icon color="medium-emphasis" icon="mdi-pencil" size="small"
           @click="emit('edit', item.sleeveNumber!)"></v-icon>
 
-        <v-icon color="medium-emphasis" icon="mdi-delete" size="small"></v-icon>
+        <v-icon @click="emit('delete', item.id!)" color="medium-emphasis" icon="mdi-delete" size="small"></v-icon>
       </div>
     </template>
     <template v-slot:tfoot>
