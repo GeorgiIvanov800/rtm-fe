@@ -6,7 +6,6 @@ import type { SaveSleeveRequest, SleeveResponse } from '@/openapi';
 import { computed, ref } from 'vue';
 import { onMounted } from 'vue';
 import { useLoadingStore } from '@/stores/loading';
-import AppDialog from '@/components/AppDialog.vue';
 import { useDialogStore } from '@/stores/dialogStore';
 import axios, { isAxiosError } from 'axios';
 
@@ -93,5 +92,4 @@ async function handleUpdate(payload: Partial<SaveSleeveRequest>): Promise<void> 
 <template>
   <div v-if="loadingStore.isLoading"></div>
   <SleeveForm v-else @save="handleSave" :initial-data="sleeveToEdit" @update="handleUpdate" />
-  <AppDialog />
 </template>

@@ -12,7 +12,7 @@ All URIs are relative to *http://localhost:8088/api/v1*
 |[**updateSleeve**](#updatesleeve) | **PATCH** /sleeves/update/{id} | |
 
 # **deleteSleeve**
-> SleeveResponse deleteSleeve()
+> deleteSleeve()
 
 
 ### Example
@@ -42,7 +42,7 @@ const { status, data } = await apiInstance.deleteSleeve(
 
 ### Return type
 
-**SleeveResponse**
+void (empty response body)
 
 ### Authorization
 
@@ -51,7 +51,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details

@@ -87,12 +87,11 @@ async function getSleeve(sleeveNumber: number) {
 
         <div class="grid-box" style="grid-column: 1 / 3; text-align: center;">
           <div class="box-label">Gereingt vom</div>
-          <div class="box-value">Иван Иванов</div>
+          <div class="box-value">Георги Иванов</div>
         </div>
 
       </div>
     </div>
-    <AppDialog />
   </body>
 </template>
 

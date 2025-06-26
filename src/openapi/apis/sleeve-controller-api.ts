@@ -269,7 +269,7 @@ export const SleeveControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteSleeve(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SleeveResponse>> {
+        async deleteSleeve(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteSleeve(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SleeveControllerApi.deleteSleeve']?.[localVarOperationServerIndex]?.url;
@@ -353,7 +353,7 @@ export const SleeveControllerApiFactory = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteSleeve(id: number, options?: RawAxiosRequestConfig): AxiosPromise<SleeveResponse> {
+        deleteSleeve(id: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.deleteSleeve(id, options).then((request) => request(axios, basePath));
         },
         /**

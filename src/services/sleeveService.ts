@@ -2,24 +2,29 @@ import { SleeveControllerApi, type SaveSleeveRequest, type SleeveResponse } from
 
 const api = new SleeveControllerApi();
 
-export function getAllSleevesBySequenceNumber(seq: number): Promise<SleeveResponse[]> {
-  return api.getSleeveSequenceNumber(seq).then((response) => response.data);
+export async function getAllSleevesBySequenceNumber(seq: number): Promise<SleeveResponse[]> {
+  const response = await api.getSleeveSequenceNumber(seq);
+  return response.data;
 }
 
-export function saveSleeve(dto: SaveSleeveRequest): Promise<SleeveResponse> {
-  return api.saveSleeve(dto).then((response) => response.data);
+export async function saveSleeve(dto: SaveSleeveRequest): Promise<SleeveResponse> {
+  const response = await api.saveSleeve(dto);
+  return response.data;
 }
 
-export function getSleeveBySleeveNumber(sleeveNumber: number): Promise<SleeveResponse> {
-  return api.getSleeveNumber(sleeveNumber).then((response) => response.data);
+export async function getSleeveBySleeveNumber(sleeveNumber: number): Promise<SleeveResponse> {
+  const response = await api.getSleeveNumber(sleeveNumber);
+  return response.data;
 }
 
-export function updateSleeve(id: number, dto: Partial<SaveSleeveRequest>): Promise<SleeveResponse> {
-  return api.updateSleeve(id, dto).then((response) => response.data);
+export async function updateSleeve(
+  id: number,
+  dto: Partial<SaveSleeveRequest>,
+): Promise<SleeveResponse> {
+  const response = await api.updateSleeve(id, dto);
+  return response.data;
 }
 
-export function deleteSleeve(id: number): Promise<void> {
-  return api.deleteSleeve(id).then(() => {
-    return;
-  });
+export async function deleteSleeve(id: number): Promise<void> {
+  await api.deleteSleeve(id);
 }

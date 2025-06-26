@@ -6,6 +6,8 @@ import { type SleeveResponse } from '@/openapi';
 import { useLoadingStore } from '@/stores/loading';
 import { getAllSleevesBySequenceNumber, deleteSleeve } from '@/services/sleeveService';
 import { watch } from 'vue';
+import { isAxiosError, type AxiosError } from 'axios';
+import { useDialogStore } from '@/stores/dialogStore';
 
 
 const route = useRoute();
@@ -14,6 +16,7 @@ const searchValue = ref<number>(Number(route.query.sleeveSequence) || 0);
 const isLoading = useLoadingStore();
 const sleeveData = ref(<SleeveResponse[]>[]);
 const error = ref<string | null>(null);
+const dialogStore = useDialogStore();
 
 
 
@@ -47,9 +50,23 @@ function onEdit(sleeveNumber: number) {
   router.push(`/sleeves/edit/${sleeveNumber}`);
 }
 
-function onDelete(sleeveId: number) {
+async function onDelete(sleeveId: number) {
   error.value = null;
 
+  try {
+    isLoading.startLoading();
+    console.log("delete clicked.");
+    // await deleteSleeve(sleeveId);
+    dialogStore.showDialog("Success", "Sleeve deleted", 'success');
+  } catch (err: unknown) {
+    if (isAxiosError(err)) {
+      const message = error.value = err.response?.data.message;
+      dialogStore.showDialog('Error', message, 'error');
+    }
+
+  } finally {
+    isLoading.stopLoading();
+  }
 
 }
 

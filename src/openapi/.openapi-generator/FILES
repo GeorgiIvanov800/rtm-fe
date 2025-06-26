@@ -1,6 +1,5 @@
 .gitignore
 .npmignore
-.openapi-generator-ignore
 api.ts
 apis/sleeve-controller-api.ts
 apis/user-controller-api.ts
