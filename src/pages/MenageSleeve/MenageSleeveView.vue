@@ -32,7 +32,7 @@ async function handleSave(payload: SaveSleeveRequest): Promise<void> {
 
   try {
     await saveSleeve(payload);
-    dialogStore.showDialog('Success', 'Save Sleeve success', 'success');
+    dialogStore.showDialog('Erfolgreich!', 'Sleeve erfolgreich angelegt - weiter geht’s!', 'success');
   } catch (err: unknown) {
     if (isAxiosError(err)) {
       const message = err.response?.data?.message;
@@ -73,7 +73,7 @@ async function handleUpdate(payload: Partial<SaveSleeveRequest>): Promise<void> 
   }
   try {
     await updateSleeve(sleeveId, payload);
-    dialogStore.showDialog('Success', 'Sleeve Updated Succsesfuly', 'success');
+    dialogStore.showDialog('Erfolgreich!', 'Update erledigt - dein Sleeve ist frisch!', 'success');
   } catch (err: unknown) {
     if (isAxiosError(err)) {
       const message = err.response?.data?.message;

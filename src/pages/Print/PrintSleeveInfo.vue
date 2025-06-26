@@ -33,7 +33,7 @@ async function getSleeve(sleeveNumber: number) {
   } catch (err: unknown) {
     if (isAxiosError(err)) {
       error.value = err.response?.data.message;
-      dialogStore.showDialog("Ooops", error.value!, 'red');
+      dialogStore.showDialog("Huch! Da ging wohl etwas schief.", error.value!, 'red');
     }
   } finally {
     loadingStore.stopLoading();

@@ -29,8 +29,10 @@ async function fetchSleeves() {
     if (sleeveData.value.length === 0) {
       return sleeveData.value = [];
     }
-  } catch (err: any) {
-    error.value = err.message;
+  } catch (err: unknown) {
+    if (isAxiosError(err)) {
+      error.value = err.message;
+    }
   } finally {
     isLoading.stopLoading();
   }
@@ -55,9 +57,8 @@ async function onDelete(sleeveId: number) {
 
   try {
     isLoading.startLoading();
-    console.log("delete clicked.");
-    // await deleteSleeve(sleeveId);
-    dialogStore.showDialog("Success", "Sleeve deleted", 'success');
+    await deleteSleeve(sleeveId);
+    dialogStore.showDialog("Erfolgreich!", "Sleeve erfolgreich gelöscht.", 'success');
   } catch (err: unknown) {
     if (isAxiosError(err)) {
       const message = error.value = err.response?.data.message;
