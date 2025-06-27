@@ -1,6 +1,7 @@
 import './styles/reset.css';
 import './styles/main.css';
 import '@mdi/font/css/materialdesignicons.css';
+import VueKeyCloak, { type VueKeycloakInstance } from '@dsb-norge/vue-keycloak-js';
 
 import 'vuetify/styles';
 import { createApp } from 'vue';
@@ -13,6 +14,11 @@ import App from './App.vue';
 import router from './router';
 import { aliases, mdi } from 'vuetify/iconsets/mdi';
 import axiosInstance from './config/axios';
+import { keycloakOptions } from './config/keycloak';
+
+console.log('Variable from .env: ', import.meta.env.VITE_KEYCLOAK_URL);
+console.log('Variable from .env: ', import.meta.env.VITE_KEYCLOAK_REALM);
+console.log('Variable from .env: ', import.meta.env.VITE_KEYCLOAK_CLIENT_ID);
 
 const app = createApp(App);
 
@@ -38,4 +44,17 @@ app.use(router);
 app.config.globalProperties.$axios = axiosInstance;
 app.provide('axios', axiosInstance);
 
-app.mount('#app');
+app.use(VueKeyCloak, {
+  ...keycloakOptions,
+  onReady: (keycloak: VueKeycloakInstance) => {
+    console.log('Keycloak is ready! ');
+    app.mount('#app');
+  },
+});
+// app.use(VueKeyCloak, {
+//   ...keycloakOptions,
+//   onReady: (keycloak: VueKeycloakInstance) => {
+//     console.log('Keycloak is ready!');
+//     app.mount('#app');
+//   },
+// });

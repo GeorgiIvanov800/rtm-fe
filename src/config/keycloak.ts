@@ -6,8 +6,8 @@ export const keycloakOptions: VueKeycloakOptions = {
     silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
   },
   config: {
-    url: 'http://localhost:8080',
-    realm: 'rtm',
-    clientId: 'vue-app',
+    url: import.meta.env.VITE_KEYCLOAK_URL,
+    realm: import.meta.env.VITE_KEYCLOAK_REALM,
+    clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID,
   },
 };
