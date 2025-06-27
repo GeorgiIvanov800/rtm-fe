@@ -43,7 +43,6 @@ app.provide('axios', axiosInstance);
 app.use(VueKeyCloak, {
   ...keycloakOptions,
   onReady: (keycloak: VueKeycloakInstance) => {
-    console.log('Keycloak is ready! ', keycloak);
     app.mount('#app');
   },
 });
