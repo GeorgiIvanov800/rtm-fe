@@ -2,7 +2,7 @@ import type { VueKeycloakOptions } from '@dsb-norge/vue-keycloak-js';
 
 export const keycloakOptions: VueKeycloakOptions = {
   init: {
-    onLoad: 'check-sso',
+    onLoad: 'login-required',
     silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
   },
   config: {

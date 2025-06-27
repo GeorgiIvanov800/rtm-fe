@@ -16,10 +16,6 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi';
 import axiosInstance from './config/axios';
 import { keycloakOptions } from './config/keycloak';
 
-console.log('Variable from .env: ', import.meta.env.VITE_KEYCLOAK_URL);
-console.log('Variable from .env: ', import.meta.env.VITE_KEYCLOAK_REALM);
-console.log('Variable from .env: ', import.meta.env.VITE_KEYCLOAK_CLIENT_ID);
-
 const app = createApp(App);
 
 const vuetify = createVuetify({
@@ -47,14 +43,7 @@ app.provide('axios', axiosInstance);
 app.use(VueKeyCloak, {
   ...keycloakOptions,
   onReady: (keycloak: VueKeycloakInstance) => {
-    console.log('Keycloak is ready! ');
+    console.log('Keycloak is ready! ', keycloak);
     app.mount('#app');
   },
 });
-// app.use(VueKeyCloak, {
-//   ...keycloakOptions,
-//   onReady: (keycloak: VueKeycloakInstance) => {
-//     console.log('Keycloak is ready!');
-//     app.mount('#app');
-//   },
-// });
