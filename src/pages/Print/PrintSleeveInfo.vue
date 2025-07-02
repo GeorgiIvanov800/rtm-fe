@@ -7,7 +7,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { format } from "date-fns";
 import { useDialogStore } from '@/stores/dialogStore';
-import AppDialog from '@/components/AppDialog.vue';
+import { useKeycloak, type VueKeycloakInstance } from '@dsb-norge/vue-keycloak-js';
 
 const route = useRoute();
 const sleeve = ref<SleeveResponse>();
@@ -16,6 +16,9 @@ const loadingStore = useLoadingStore();
 const sleeveNumber = ref<number>(Number(route.query.sleeveNumber) || 0);
 const dateTime = format(new Date().toLocaleDateString(), "dd/MM/yyyy");
 let manufactureDate: string = '';
+const keycloak: VueKeycloakInstance = useKeycloak();
+
+const name: string = keycloak.fullName!;
 
 const dialogStore = useDialogStore();
 
@@ -87,7 +90,7 @@ async function getSleeve(sleeveNumber: number) {
 
         <div class="grid-box" style="grid-column: 1 / 3; text-align: center;">
           <div class="box-label">Gereingt vom</div>
-          <div class="box-value">Георги Иванов</div>
+          <div class="box-value">{{name}}</div>
         </div>
 
       </div>
