@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
 import SleeveTable from './components/SleeveTable.vue';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { type SleeveResponse } from '@/openapi';
 import { useLoadingStore } from '@/stores/loading';
 import { getAllSleevesBySequenceNumber, deleteSleeve } from '@/services/sleeveService';
-import { watch } from 'vue';
 import { isAxiosError, type AxiosError } from 'axios';
 import { useDialogStore } from '@/stores/dialogStore';
+import { useKeycloak, type VueKeycloakInstance } from '@dsb-norge/vue-keycloak-js';
 
 
 const route = useRoute();
@@ -17,7 +17,8 @@ const isLoading = useLoadingStore();
 const sleeveData = ref(<SleeveResponse[]>[]);
 const error = ref<string | null>(null);
 const dialogStore = useDialogStore();
-
+const keycloak: VueKeycloakInstance = useKeycloak();
+const isAdmin: boolean = keycloak.hasRealmRole!('admin');
 
 
 async function fetchSleeves() {
@@ -90,7 +91,7 @@ watch(() => route.query.sleeveSequence,
   <v-sheet class="pa-8 elevation-4 rounded-lg" color="surface">
     <v-container>
       <SleeveTable :sleeves="sleeveData" :search-value="searchValue" @search="onSearch" @redirect="onRedirect"
-        @edit="onEdit" @delete="onDelete" />
+        @edit="onEdit" @delete="onDelete" :is-admin="isAdmin"/>
     </v-container>
   </v-sheet>
 </template>

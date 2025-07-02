@@ -2,8 +2,7 @@
 import { type DataTableHeader } from 'vuetify';
 import { formatDate } from '@/utils/formatDate';
 import type { SleeveResponse, SleeveResponseConditionEnum, SleeveResponseTypeEnum } from '@/openapi';
-import { ref } from 'vue';
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { SleeveTypeDE, SleeveConditionDE } from '@/utils/translateTypes';
 
 
@@ -11,8 +10,10 @@ import { SleeveTypeDE, SleeveConditionDE } from '@/utils/translateTypes';
 const props = defineProps<{
   sleeves: SleeveResponse[] | [];
   searchValue: number;
+  isAdmin: boolean;
 }>();
 
+console.log("From Sleeve Table", props.isAdmin);
 
 const EMPTY_MESSAGE = 'Keine Sleeves mit der angegebenen Satznummer gefunden. Bitte versuchen Sie es mit einer anderen Nummer.';
 
@@ -41,8 +42,9 @@ const translateSleeveCondition = (type: SleeveResponseConditionEnum | undefined)
   return SleeveConditionDE[type] || type;
 };
 
-const headers: DataTableHeader[] = [
-  { title: 'Satz Nummer', key: 'sequenceNumber', align: 'start', sortable: false },
+const headers = computed( () => {
+  const baseHeaders: DataTableHeader[] = [
+{ title: 'Satz Nummer', key: 'sequenceNumber', align: 'start', sortable: false },
   { title: 'Type', key: 'type', align: 'start', sortable: false },
   { title: 'Design', key: 'design', align: 'start', sortable: false },
   { title: 'Farbe', key: 'color', align: 'start', sortable: false },
@@ -52,8 +54,12 @@ const headers: DataTableHeader[] = [
   { title: 'Breite', key: 'width', sortable: false },
   { title: 'Sleeve Number', key: 'sleeveNumber', sortable: false },
   { title: 'Datum', key: 'manufactureDate', align: 'end', sortable: true },
-  { title: 'Actions', key: 'actions', align: 'end', sortable: false },
-];
+]
+  if(props.isAdmin) {
+    baseHeaders.push({ title: 'Actions', key: 'actions', align: 'end', sortable: false })
+  }
+ return baseHeaders;
+});
 </script>
 
 <template>
@@ -65,7 +71,7 @@ const headers: DataTableHeader[] = [
           <v-icon color="medium-emphasis" icon="mdi-cog" size="large" start></v-icon>
           Sleeves
         </v-toolbar-title>
-        <v-btn class="me-2" prepend-icon="mdi-plus" rounded="lg" text="Neu Sleeve Erstelen" border
+        <v-btn v-if="props.isAdmin" class="me-2" prepend-icon="mdi-plus" rounded="lg" text="Neu Sleeve Erstelen" border
           @click="emit('redirect')"></v-btn>
       </v-toolbar>
     </template>
