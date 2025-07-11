@@ -16,7 +16,9 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi';
 import axiosInstance from './config/axios';
 import { keycloakOptions } from './config/keycloak';
 
+export const IsAdminKey = Symbol('isAdmin');
 const app = createApp(App);
+
 
 const vuetify = createVuetify({
   components,
@@ -43,6 +45,8 @@ app.provide('axios', axiosInstance);
 app.use(VueKeyCloak, {
   ...keycloakOptions,
   onReady: (keycloak: VueKeycloakInstance) => {
+    const isAdmin = keycloak.hasRealmRole!('admin');
+    app.provide(IsAdminKey, isAdmin);
     app.mount('#app');
   },
 });
