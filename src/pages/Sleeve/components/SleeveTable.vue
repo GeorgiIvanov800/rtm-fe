@@ -13,8 +13,6 @@ const props = defineProps<{
   isAdmin: boolean;
 }>();
 
-console.log("From Sleeve Table", props.isAdmin);
-
 const EMPTY_MESSAGE = 'Keine Sleeves mit der angegebenen Satznummer gefunden. Bitte versuchen Sie es mit einer anderen Nummer.';
 
 const localSearchValue = ref<number>(props.searchValue);

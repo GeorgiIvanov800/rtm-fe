@@ -7,15 +7,15 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 declare module 'vue-router' {
   interface RouteMeta {
-    requiredRoles?: string[];
+    requiresAdmin: boolean;
   }
 }
 
 const routes: Array<RouteRecordRaw> = [
   { path: '/', name: 'home', component: HomeView },
   { path: '/sleeves', name: 'sleeves', component: SleeveView },
-  { path: '/sleeves/create', name: 'CreateSleeve', component: ManageSleeveView, meta: {requiredRoles: ['admin']} },
-  { path: '/sleeves/edit/:id', name: 'EditSleeve', component: ManageSleeveView, meta: {requiredRoles: ['admin']} },
+  { path: '/sleeves/create', name: 'CreateSleeve', component: ManageSleeveView, meta: {requiresAdmin: true} },
+  { path: '/sleeves/edit/:id', name: 'EditSleeve', component: ManageSleeveView, meta: {requiresAdmin: true} },
   { path: '/sleeves/print', name: 'PrintSleeveInfo', component: PrintSleeveInfo },
 ];
 

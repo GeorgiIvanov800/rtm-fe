@@ -19,7 +19,6 @@ import { keycloakOptions } from './config/keycloak';
 export const IsAdminKey = Symbol('isAdmin');
 const app = createApp(App);
 
-
 const vuetify = createVuetify({
   components,
   directives,
@@ -38,7 +37,7 @@ const vuetify = createVuetify({
 
 app.use(createPinia());
 app.use(vuetify);
-app.use(router);
+
 app.config.globalProperties.$axios = axiosInstance;
 app.provide('axios', axiosInstance);
 
@@ -47,6 +46,17 @@ app.use(VueKeyCloak, {
   onReady: (keycloak: VueKeycloakInstance) => {
     const isAdmin = keycloak.hasRealmRole!('admin');
     app.provide(IsAdminKey, isAdmin);
+
+    router.beforeEach(async (to, from, next) => {
+      if (to.meta.requiresAdmin && !isAdmin) {
+        next('/');
+        return;
+      }
+      next();
+    });
+
+    app.use(router);
+
     app.mount('#app');
   },
 });
