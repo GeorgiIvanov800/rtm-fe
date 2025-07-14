@@ -1,6 +1,15 @@
-import { SleeveControllerApi, type SaveSleeveRequest, type SleeveResponse } from '@/openapi';
+import { Configuration, SleeveControllerApi, type SaveSleeveRequest, type SleeveResponse } from '@/openapi';
+import { useKeycloak, type VueKeycloakInstance } from '@dsb-norge/vue-keycloak-js';
 
-const api = new SleeveControllerApi();
+const keycloak: VueKeycloakInstance = useKeycloak();
+
+const configuration = new Configuration({
+  accessToken: () => {
+    const token: string = keycloak.token!;
+    return token ? `${token}` : '';
+  }
+})
+const api = new SleeveControllerApi(configuration);
 
 export async function getAllSleevesBySequenceNumber(seq: number): Promise<SleeveResponse[]> {
   const response = await api.getSleeveSequenceNumber(seq);
