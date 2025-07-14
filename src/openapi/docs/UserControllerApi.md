@@ -42,7 +42,7 @@ const { status, data } = await apiInstance.registerUser(
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 

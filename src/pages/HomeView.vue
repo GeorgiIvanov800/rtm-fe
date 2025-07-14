@@ -11,6 +11,8 @@ const searchValue = ref('');
 const printValue = ref('');
 const router: Router = useRouter();
 
+
+
 const numericRules: ValidationRule[] = [
   (value: string): true | string => {
     if (/^[0-9]+$/.test(value)) return true;

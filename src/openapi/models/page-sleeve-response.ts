@@ -34,13 +34,13 @@ export interface PageSleeveResponse {
      * @type {number}
      * @memberof PageSleeveResponse
      */
-    'totalElements'?: number;
+    'totalPages'?: number;
     /**
      * 
      * @type {number}
      * @memberof PageSleeveResponse
      */
-    'totalPages'?: number;
+    'totalElements'?: number;
     /**
      * 
      * @type {PageableObject}
